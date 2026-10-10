@@ -24,7 +24,7 @@ local CLICK_SOUND = "rbxassetid://9060469075"
 local function PlayExecuteSound()
     local sound = Instance.new("Sound")
     sound.SoundId = LOUD_EXECUTE_SOUND
-    sound.Volume = 2.5 -- High volume for extra loudness
+    sound.Volume = 2.5
     sound.Parent = SoundService
     sound:Play()
     sound.Ended:Connect(function()
@@ -150,7 +150,7 @@ FOVCircleCorner.CornerRadius = UDim.new(1, 0)
 FOVCircleCorner.Parent = FOVCircle
 
 local FOVCircleStroke = Instance.new("UIStroke")
-FOVCircleStroke.Color = Color3.fromRGB(168, 85, 247)
+FOVCircleStroke.Color = Color3.fromRGB(0, 255, 150) -- Neon Emerald
 FOVCircleStroke.Thickness = 1.5
 FOVCircleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 FOVCircleStroke.Parent = FOVCircle
@@ -163,16 +163,16 @@ KeyFrame.Name = "KeyFrame"
 KeyFrame.Size = UDim2.fromOffset(280, 200)
 KeyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 KeyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-KeyFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
+KeyFrame.BackgroundColor3 = Color3.fromRGB(10, 12, 16)
 KeyFrame.Parent = ScreenGui
 
 local KeyCorner = Instance.new("UICorner")
-KeyCorner.CornerRadius = UDim.new(0, 12)
+KeyCorner.CornerRadius = UDim.new(0, 10)
 KeyCorner.Parent = KeyFrame
 
 local KeyStroke = Instance.new("UIStroke")
 KeyStroke.Thickness = 1.5
-KeyStroke.Color = Color3.fromRGB(168, 85, 247)
+KeyStroke.Color = Color3.fromRGB(0, 255, 150)
 KeyStroke.Parent = KeyFrame
 
 local KeyLogo = Instance.new("ImageLabel")
@@ -195,7 +195,7 @@ KeyTitle.Parent = KeyFrame
 local KeyInput = Instance.new("TextBox")
 KeyInput.Position = UDim2.fromOffset(25, 95)
 KeyInput.Size = UDim2.new(1, -50, 0, 32)
-KeyInput.BackgroundColor3 = Color3.fromRGB(25, 20, 35)
+KeyInput.BackgroundColor3 = Color3.fromRGB(18, 22, 28)
 KeyInput.Font = Enum.Font.Gotham
 KeyInput.PlaceholderText = "Enter Key (JA69)..."
 KeyInput.Text = ""
@@ -204,18 +204,18 @@ KeyInput.TextSize = 12
 KeyInput.Parent = KeyFrame
 
 local KeyInputCorner = Instance.new("UICorner")
-KeyInputCorner.CornerRadius = UDim.new(0, 8)
+KeyInputCorner.CornerRadius = UDim.new(0, 6)
 KeyInputCorner.Parent = KeyInput
 
 local KeyInputStroke = Instance.new("UIStroke")
-KeyInputStroke.Color = Color3.fromRGB(110, 60, 175)
+KeyInputStroke.Color = Color3.fromRGB(0, 180, 110)
 KeyInputStroke.Thickness = 1
 KeyInputStroke.Parent = KeyInput
 
 local KeySubmit = Instance.new("TextButton")
 KeySubmit.Position = UDim2.fromOffset(25, 138)
 KeySubmit.Size = UDim2.new(1, -50, 0, 32)
-KeySubmit.BackgroundColor3 = Color3.fromRGB(60, 35, 95)
+KeySubmit.BackgroundColor3 = Color3.fromRGB(0, 150, 90)
 KeySubmit.Font = Enum.Font.GothamBold
 KeySubmit.Text = "Submit Key"
 KeySubmit.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -223,7 +223,7 @@ KeySubmit.TextSize = 12
 KeySubmit.Parent = KeyFrame
 
 local KeySubmitCorner = Instance.new("UICorner")
-KeySubmitCorner.CornerRadius = UDim.new(0, 8)
+KeySubmitCorner.CornerRadius = UDim.new(0, 6)
 KeySubmitCorner.Parent = KeySubmit
 
 ----------------------------------------------------
@@ -234,7 +234,7 @@ Menu.Name = "MiniMenu"
 Menu.Size = UDim2.fromOffset(220, 280)
 Menu.AnchorPoint = Vector2.new(0.5, 0.5)
 Menu.Position = UDim2.new(0.5, 0, 0.5, 0)
-Menu.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
+Menu.BackgroundColor3 = Color3.fromRGB(10, 12, 16)
 Menu.ClipsDescendants = true
 Menu.Visible = false -- Hidden until Key verified
 Menu.Active = true
@@ -245,8 +245,8 @@ ToggleButton.Name = "ToggleButton"
 ToggleButton.Size = UDim2.fromOffset(48, 48)
 ToggleButton.AnchorPoint = Vector2.new(0.5, 0.5)
 ToggleButton.Position = UDim2.new(0.12, 0, 0.5, 0)
-ToggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
-ToggleButton.Image = ANIMAL_LOGO -- Animal Logo
+ToggleButton.BackgroundColor3 = Color3.fromRGB(15, 18, 24)
+ToggleButton.Image = ANIMAL_LOGO
 ToggleButton.ScaleType = Enum.ScaleType.Fit
 ToggleButton.ZIndex = 10
 ToggleButton.Visible = false -- Hidden until Key verified
@@ -259,7 +259,7 @@ ToggleCorner.Parent = ToggleButton
 
 local ToggleStroke = Instance.new("UIStroke")
 ToggleStroke.Thickness = 1.5
-ToggleStroke.Color = Color3.fromRGB(168, 85, 247)
+ToggleStroke.Color = Color3.fromRGB(0, 255, 150)
 ToggleStroke.Parent = ToggleButton
 
 -- Key Validation Action
@@ -271,11 +271,11 @@ KeySubmit.Activated:Connect(function()
         ToggleButton.Visible = true
     else
         KeySubmit.Text = "Incorrect Key!"
-        KeySubmit.BackgroundColor3 = Color3.fromRGB(150, 30, 30)
+        KeySubmit.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
         task.delay(1.5, function()
             if KeySubmit then
                 KeySubmit.Text = "Submit Key"
-                KeySubmit.BackgroundColor3 = Color3.fromRGB(60, 35, 95)
+                KeySubmit.BackgroundColor3 = Color3.fromRGB(0, 150, 90)
             end
         end)
     end
@@ -319,12 +319,12 @@ ToggleButton.Activated:Connect(function()
 end)
 
 local Corner = Instance.new("UICorner")
-Corner.CornerRadius = UDim.new(0, 12)
+Corner.CornerRadius = UDim.new(0, 10)
 Corner.Parent = Menu
 
 local Stroke = Instance.new("UIStroke")
 Stroke.Thickness = 1.5
-Stroke.Color = Color3.fromRGB(168, 85, 247)
+Stroke.Color = Color3.fromRGB(0, 255, 150)
 Stroke.Parent = Menu
 
 local Title = Instance.new("TextLabel")
@@ -341,16 +341,22 @@ Title.Parent = Menu
 local SaveConfigButton = Instance.new("TextButton")
 SaveConfigButton.Position = UDim2.new(1, -84, 0, 8)
 SaveConfigButton.Size = UDim2.fromOffset(74, 22)
-SaveConfigButton.BackgroundColor3 = Color3.fromRGB(45, 30, 70)
+SaveConfigButton.BackgroundColor3 = Color3.fromRGB(15, 45, 30)
 SaveConfigButton.Font = Enum.Font.GothamBold
 SaveConfigButton.Text = "Save Config"
-SaveConfigButton.TextColor3 = Color3.fromRGB(220, 200, 255)
+SaveConfigButton.TextColor3 = Color3.fromRGB(180, 255, 210)
 SaveConfigButton.TextSize = 9
 SaveConfigButton.Parent = Menu
 
 local SaveConfigCorner = Instance.new("UICorner")
 SaveConfigCorner.CornerRadius = UDim.new(0, 6)
 SaveConfigCorner.Parent = SaveConfigButton
+
+local SaveConfigStroke = Instance.new("UIStroke")
+SaveConfigStroke.Color = Color3.fromRGB(0, 255, 150)
+SaveConfigStroke.Thickness = 1
+SaveConfigStroke.Transparency = 0.5
+SaveConfigStroke.Parent = SaveConfigButton
 
 SaveConfigButton.Activated:Connect(function()
     PlayClickSound()
@@ -374,8 +380,8 @@ Subtitle.BackgroundTransparency = 1
 Subtitle.Position = UDim2.fromOffset(12, 28)
 Subtitle.Size = UDim2.new(1, -20, 0, 14)
 Subtitle.Font = Enum.Font.Gotham
-Subtitle.Text = "by Yoshkie Daniel Berwega"
-Subtitle.TextColor3 = Color3.fromRGB(160, 150, 190)
+Subtitle.Text = "by JAMOnagRant"
+Subtitle.TextColor3 = Color3.fromRGB(0, 200, 130)
 Subtitle.TextSize = 9
 Subtitle.TextXAlignment = Enum.TextXAlignment.Left
 Subtitle.Parent = Menu
@@ -385,7 +391,7 @@ local function CreateStyledButton(Name, Y, InitialText)
     Btn.Name = Name
     Btn.Position = UDim2.fromOffset(12, Y)
     Btn.Size = UDim2.new(1, -24, 0, 28)
-    Btn.BackgroundColor3 = Color3.fromRGB(30, 25, 45)
+    Btn.BackgroundColor3 = Color3.fromRGB(18, 22, 28)
     Btn.Font = Enum.Font.GothamBold
     Btn.Text = InitialText
     Btn.TextColor3 = Color3.fromRGB(230, 230, 245)
@@ -393,13 +399,13 @@ local function CreateStyledButton(Name, Y, InitialText)
     Btn.Parent = Menu
 
     local Corner = Instance.new("UICorner")
-    Corner.CornerRadius = UDim.new(0, 8)
+    Corner.CornerRadius = UDim.new(0, 6)
     Corner.Parent = Btn
 
     local Stroke = Instance.new("UIStroke")
-    Stroke.Color = Color3.fromRGB(110, 60, 175)
+    Stroke.Color = Color3.fromRGB(0, 180, 110)
     Stroke.Thickness = 1
-    Stroke.Transparency = 0.4
+    Stroke.Transparency = 0.5
     Stroke.Parent = Btn
 
     return Btn
@@ -423,7 +429,7 @@ local function MakeSlider(Name, LabelText, Y, Minimum, Maximum, InitialValue, Fo
     local Track = Instance.new("TextButton")
     Track.Position = UDim2.fromOffset(12, Y + 16)
     Track.Size = UDim2.new(1, -24, 0, 10)
-    Track.BackgroundColor3 = Color3.fromRGB(30, 25, 45)
+    Track.BackgroundColor3 = Color3.fromRGB(18, 22, 28)
     Track.Text = ""
     Track.Parent = Menu
 
@@ -433,7 +439,7 @@ local function MakeSlider(Name, LabelText, Y, Minimum, Maximum, InitialValue, Fo
 
     local Fill = Instance.new("Frame")
     Fill.Size = UDim2.new((InitialValue - Minimum) / (Maximum - Minimum), 0, 1, 0)
-    Fill.BackgroundColor3 = Color3.fromRGB(168, 85, 247)
+    Fill.BackgroundColor3 = Color3.fromRGB(0, 255, 150)
     Fill.Parent = Track
 
     local Knob = Instance.new("Frame")
@@ -498,14 +504,14 @@ FOVCircleButton.Activated:Connect(function()
     FOVCircleEnabled = not FOVCircleEnabled
     FOVCircle.Visible = FOVCircleEnabled
     FOVCircleButton.Text = FOVCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
-    FOVCircleButton.BackgroundColor3 = FOVCircleEnabled and Color3.fromRGB(60, 35, 95) or Color3.fromRGB(30, 25, 45)
+    FOVCircleButton.BackgroundColor3 = FOVCircleEnabled and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
 end)
 
 TeamButton.Activated:Connect(function()
     PlayClickSound()
     TeamCheck = not TeamCheck
     TeamButton.Text = TeamCheck and "Team Check: ON" or "Team Check: OFF"
-    TeamButton.BackgroundColor3 = TeamCheck and Color3.fromRGB(60, 35, 95) or Color3.fromRGB(30, 25, 45)
+    TeamButton.BackgroundColor3 = TeamCheck and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
 end)
 
 -- ESP Functions
@@ -533,7 +539,7 @@ local function CreateESP(Player)
         Highlight.Parent = Character
         ESPHighlights[Player] = Highlight
     end
-    Highlight.OutlineColor = isTeammate(Player) and Color3.fromRGB(80, 150, 255) or Color3.fromRGB(255, 60, 90)
+    Highlight.OutlineColor = isTeammate(Player) and Color3.fromRGB(80, 180, 255) or Color3.fromRGB(0, 255, 150)
 end
 
 local function RefreshESP()
@@ -550,7 +556,7 @@ ESPButton.Activated:Connect(function()
     PlayClickSound()
     ESPEnabled = not ESPEnabled
     ESPButton.Text = ESPEnabled and "ESP: ON" or "ESP: OFF"
-    ESPButton.BackgroundColor3 = ESPEnabled and Color3.fromRGB(60, 35, 95) or Color3.fromRGB(30, 25, 45)
+    ESPButton.BackgroundColor3 = ESPEnabled and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
     RefreshESP()
 end)
 
@@ -634,7 +640,7 @@ AimButton.Activated:Connect(function()
     PlayClickSound()
 	AimEnabled = not AimEnabled
 	AimButton.Text = AimEnabled and "Aim Assist: ON" or "Aim Assist: OFF"
-	AimButton.BackgroundColor3 = AimEnabled and Color3.fromRGB(60, 35, 95) or Color3.fromRGB(30, 25, 45)
+	AimButton.BackgroundColor3 = AimEnabled and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
 end)
 
 RunService.RenderStepped:Connect(function()
