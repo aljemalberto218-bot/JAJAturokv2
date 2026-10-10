@@ -7,10 +7,6 @@
                                                       |___/ 
 ]]
 
-if not game:IsLoaded() then
-    game.Loaded:Wait()
-end
-
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -21,7 +17,6 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- Approved Roblox Assets
 local ANIMAL_LOGO = "rbxassetid://6534551122" 
-local SASUKE_IMAGE = "rbxassetid://6810237996" -- Approved Roblox Sasuke Image Asset
 local LOUD_EXECUTE_SOUND = "rbxassetid://9125298882" 
 local CLICK_SOUND = "rbxassetid://9060469075"
 
@@ -49,24 +44,6 @@ local function PlayClickSound()
     end)
 end
 
-local function runPrerequisite(url, name)
-    local ok, result = pcall(function()
-        local source = game:HttpGet(url)
-        local runner = loadstring(source)
-        assert(type(runner) == "function", name .. " source did not return executable code")
-        return runner()
-    end)
-    if not ok then
-        warn("[JAJAaHub] " .. name .. " failed to initialize: " .. tostring(result))
-    end
-    return ok
-end
-
-do
-    local ANTI_KICK_URL = "https://raw.githubusercontent.com/SUUUUUS00000/MEGGD-Anti-kick/refs/heads/main/MEGGD%20Best%20Anti-kick.lua"
-    runPrerequisite(ANTI_KICK_URL, "Anti-kick")
-end
-
 -- ScreenGui Setup
 local OldGui = PlayerGui:FindFirstChild("JAJAaHub")
 if OldGui then OldGui:Destroy() end
@@ -79,7 +56,7 @@ ScreenGui.DisplayOrder = 100
 ScreenGui.Parent = PlayerGui
 
 ----------------------------------------------------
--- SASUKE INTRO SCREEN (WITH PICTURE)
+-- SASUKE INTRO SCREEN
 ----------------------------------------------------
 local IntroFrame = Instance.new("Frame")
 IntroFrame.Size = UDim2.fromScale(1, 1)
@@ -87,133 +64,124 @@ IntroFrame.BackgroundColor3 = Color3.fromRGB(5, 7, 10)
 IntroFrame.ZIndex = 50
 IntroFrame.Parent = ScreenGui
 
-local SasukePic = Instance.new("ImageLabel")
-SasukePic.Size = UDim2.fromOffset(140, 140)
-SasukePic.AnchorPoint = Vector2.new(0.5, 0.5)
-SasukePic.Position = UDim2.fromScale(0.5, 0.4)
-SasukePic.BackgroundTransparency = 1
-SasukePic.Image = SASUKE_IMAGE
-SasukePic.ScaleType = Enum.ScaleType.Fit
-SasukePic.ZIndex = 51
-SasukePic.Parent = IntroFrame
-
-local IntroCorner = Instance.new("UICorner")
-IntroCorner.CornerRadius = UDim.new(0, 16)
-IntroCorner.Parent = SasukePic
-
 local IntroText = Instance.new("TextLabel")
-IntroText.Size = UDim2.new(1, 0, 0, 40)
+IntroText.Size = UDim2.new(1, 0, 0, 50)
 IntroText.AnchorPoint = Vector2.new(0.5, 0.5)
-IntroText.Position = UDim2.fromScale(0.5, 0.6)
+IntroText.Position = UDim2.fromScale(0.5, 0.5)
 IntroText.BackgroundTransparency = 1
 IntroText.Font = Enum.Font.GothamBold
 IntroText.Text = "⚡ SASUKE MODE ACTIVATED ⚡"
 IntroText.TextColor3 = Color3.fromRGB(0, 255, 150)
-IntroText.TextSize = 20
+IntroText.TextSize = 22
 IntroText.ZIndex = 51
 IntroText.Parent = IntroFrame
 
-task.delay(2.5, function()
+task.delay(2, function()
     if IntroFrame and IntroFrame.Parent then
         IntroFrame:Destroy()
     end
 end)
 
-----------------------------------------------------
--- FAKE PC CLIENT PROMPT
-----------------------------------------------------
-local promptGui = Instance.new("ScreenGui")
-promptGui.Name = "JAJAaHubPCClientPrompt"
-promptGui.ResetOnSpawn = false
-promptGui.IgnoreGuiInset = true
-promptGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-promptGui.Parent = PlayerGui
+-- Settings & Config
+local AimEnabled = false
+local ESPEnabled = false
+local FOVCircleEnabled = false
+local FakePCEnabled = false
+local FOV = 120
+local TrackingStrength = 0.20
+local WallCheck = true
+local TeamCheck = true
+local ESPHighlights = {}
+local ConfigFileName = "JAJAaHubConfig.json"
 
-local overlay = Instance.new("Frame")
-overlay.Size = UDim2.fromScale(1, 1)
-overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-overlay.BackgroundTransparency = 0.4
-overlay.BorderSizePixel = 0
-overlay.ZIndex = 40
-overlay.Parent = promptGui
-
-local box = Instance.new("Frame")
-box.AnchorPoint = Vector2.new(0.5, 0.5)
-box.Position = UDim2.fromScale(0.5, 0.5)
-box.Size = UDim2.fromOffset(330, 190)
-box.BackgroundColor3 = Color3.fromRGB(10, 12, 16)
-box.BorderSizePixel = 0
-box.ZIndex = 41
-box.Parent = overlay
-
-Instance.new("UICorner", box).CornerRadius = UDim.new(0, 12)
-local stroke = Instance.new("UIStroke")
-stroke.Color = Color3.fromRGB(0, 255, 150)
-stroke.Thickness = 1.5
-stroke.Parent = box
-
-local title = Instance.new("TextLabel")
-title.Position = UDim2.fromOffset(20, 18)
-title.Size = UDim2.new(1, -40, 0, 25)
-title.BackgroundTransparency = 1
-title.Text = "Fake PC Client"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 16
-title.ZIndex = 42
-title.TextXAlignment = Enum.TextXAlignment.Left
-title.Parent = box
-
-local message = Instance.new("TextLabel")
-message.Position = UDim2.fromOffset(20, 52)
-message.Size = UDim2.new(1, -40, 0, 48)
-message.BackgroundTransparency = 1
-message.Text = "Do you want to use the Fake PC Client (Device Spoofer)?"
-message.TextColor3 = Color3.fromRGB(190, 195, 210)
-message.Font = Enum.Font.Gotham
-message.TextSize = 11
-message.ZIndex = 42
-message.TextWrapped = true
-message.TextXAlignment = Enum.TextXAlignment.Left
-message.Parent = box
-
-local yes = Instance.new("TextButton")
-yes.Position = UDim2.fromOffset(20, 122)
-yes.Size = UDim2.new(0.5, -25, 0, 42)
-yes.BackgroundColor3 = Color3.fromRGB(0, 150, 90)
-yes.BorderSizePixel = 0
-yes.AutoButtonColor = false
-yes.Text = "YES"
-yes.TextColor3 = Color3.fromRGB(255, 255, 255)
-yes.Font = Enum.Font.GothamBold
-yes.TextSize = 12
-yes.ZIndex = 42
-yes.Parent = box
-Instance.new("UICorner", yes).CornerRadius = UDim.new(0, 8)
-
-local no = Instance.new("TextButton")
-no.Position = UDim2.new(0.5, 5, 0, 122)
-no.Size = UDim2.new(0.5, -25, 0, 42)
-no.BackgroundColor3 = Color3.fromRGB(25, 30, 40)
-no.BorderSizePixel = 0
-no.AutoButtonColor = false
-no.Text = "NO"
-no.TextColor3 = Color3.fromRGB(255, 255, 255)
-no.Font = Enum.Font.GothamBold
-no.TextSize = 12
-no.ZIndex = 42
-no.Parent = box
-Instance.new("UICorner", no).CornerRadius = UDim.new(0, 8)
-
-local choice = nil
-yes.MouseButton1Click:Connect(function() PlayClickSound(); choice = true end)
-no.MouseButton1Click:Connect(function() PlayClickSound(); choice = false end)
-repeat task.wait() until choice ~= nil
-promptGui:Destroy()
-if choice then
-    local DEVICE_SPOOFER_URL = "https://raw.githubusercontent.com/yBloodz/Free-scripts/refs/heads/main/MVSD-DEVICE-SPOOFER"
-    runPrerequisite(DEVICE_SPOOFER_URL, "Device Spoofer")
+local function ReadSavedConfig()
+    if type(readfile) ~= "function" or type(isfile) ~= "function" then return end
+    local ok, data = pcall(function()
+        if not isfile(ConfigFileName) then return nil end
+        return HttpService:JSONDecode(readfile(ConfigFileName))
+    end)
+    if ok and type(data) == "table" then
+        if type(data.FOV) == "number" then FOV = math.clamp(data.FOV, 20, 300) end
+        if type(data.TrackingStrength) == "number" then TrackingStrength = math.clamp(data.TrackingStrength, 0.01, 0.50) end
+        if type(data.TeamCheck) == "boolean" then TeamCheck = data.TeamCheck end
+        if type(data.AimEnabled) == "boolean" then AimEnabled = data.AimEnabled end
+        if type(data.ESPEnabled) == "boolean" then ESPEnabled = data.ESPEnabled end
+        if type(data.FOVCircleEnabled) == "boolean" then FOVCircleEnabled = data.FOVCircleEnabled end
+    end
 end
+ReadSavedConfig()
+
+-- Team Checking Logic
+local TEAM_MARKERS = {"StageTeamSide", "Team", "TeamName", "TeamColor", "TeamId", "TeamID", "team"}
+local function readTeamMarker(instance)
+    if not instance then return nil end
+    for _, name in ipairs(TEAM_MARKERS) do
+        local attribute = instance:GetAttribute(name)
+        if attribute ~= nil then return name .. "=" .. tostring(attribute) end
+        local child = instance:FindFirstChild(name)
+        if child and child:IsA("ValueBase") then return name .. "=" .. tostring(child.Value) end
+    end
+    return nil
+end
+
+local function getCustomTeamIdentity(targetPlayer)
+    if not targetPlayer then return nil end
+    local marker = readTeamMarker(targetPlayer) or readTeamMarker(targetPlayer.Character)
+    if marker then return marker end
+    local stats = targetPlayer:FindFirstChild("leaderstats")
+    marker = readTeamMarker(stats)
+    if marker then return marker end
+    if not targetPlayer.Neutral then return "TeamColor=" .. tostring(targetPlayer.TeamColor) end
+    return nil
+end
+
+local customTeamCache = { count = 0, at = 0 }
+local function getCustomTeamCount()
+    local now = os.clock()
+    if now - customTeamCache.at > 0.5 then
+        local seen, count = {}, 0
+        for _, targetPlayer in ipairs(Players:GetPlayers()) do
+            local identity = getCustomTeamIdentity(targetPlayer)
+            if identity and not seen[identity] then
+                seen[identity] = true
+                count = count + 1
+            end
+        end
+        customTeamCache.count = count
+        customTeamCache.at = now
+    end
+    return customTeamCache.count
+end
+
+local function isTeammate(targetPlayer)
+    if not targetPlayer or targetPlayer == LocalPlayer then return false end
+    if LocalPlayer.Team and targetPlayer.Team then return LocalPlayer.Team == targetPlayer.Team end
+    local localTeam = getCustomTeamIdentity(LocalPlayer)
+    local targetTeam = getCustomTeamIdentity(targetPlayer)
+    if not localTeam or not targetTeam then return false end
+    return getCustomTeamCount() >= 2 and localTeam == targetTeam
+end
+
+-- FOV Circle
+local FOVCircle = Instance.new("Frame")
+FOVCircle.Name = "FOVCircle"
+FOVCircle.AnchorPoint = Vector2.new(0.5, 0.5)
+FOVCircle.Position = UDim2.fromScale(0.5, 0.5)
+FOVCircle.Size = UDim2.fromOffset(FOV * 2, FOV * 2)
+FOVCircle.BackgroundTransparency = 1
+FOVCircle.Visible = FOVCircleEnabled
+FOVCircle.ZIndex = 2
+FOVCircle.Parent = ScreenGui
+
+local FOVCircleCorner = Instance.new("UICorner")
+FOVCircleCorner.CornerRadius = UDim.new(1, 0)
+FOVCircleCorner.Parent = FOVCircle
+
+local FOVCircleStroke = Instance.new("UIStroke")
+FOVCircleStroke.Color = Color3.fromRGB(0, 255, 150)
+FOVCircleStroke.Thickness = 1.5
+FOVCircleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+FOVCircleStroke.Parent = FOVCircle
 
 ----------------------------------------------------
 -- KEY SYSTEM UI
@@ -224,7 +192,7 @@ KeyFrame.Size = UDim2.fromOffset(280, 200)
 KeyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 KeyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 KeyFrame.BackgroundColor3 = Color3.fromRGB(10, 12, 16)
-KeyFrame.ZIndex = 30
+KeyFrame.ZIndex = 20
 KeyFrame.Parent = ScreenGui
 
 local KeyCorner = Instance.new("UICorner")
@@ -241,7 +209,7 @@ KeyLogo.Size = UDim2.fromOffset(45, 45)
 KeyLogo.Position = UDim2.new(0.5, -22, 0, 12)
 KeyLogo.BackgroundTransparency = 1
 KeyLogo.Image = ANIMAL_LOGO
-KeyLogo.ZIndex = 31
+KeyLogo.ZIndex = 21
 KeyLogo.Parent = KeyFrame
 
 local KeyTitle = Instance.new("TextLabel")
@@ -252,7 +220,7 @@ KeyTitle.Font = Enum.Font.GothamBold
 KeyTitle.Text = "JAJAa.a v1 hub Key System"
 KeyTitle.TextColor3 = Color3.fromRGB(240, 240, 255)
 KeyTitle.TextSize = 13
-KeyTitle.ZIndex = 31
+KeyTitle.ZIndex = 21
 KeyTitle.Parent = KeyFrame
 
 local KeyInput = Instance.new("TextBox")
@@ -264,7 +232,7 @@ KeyInput.PlaceholderText = "Enter Key (JA69)..."
 KeyInput.Text = ""
 KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeyInput.TextSize = 12
-KeyInput.ZIndex = 31
+KeyInput.ZIndex = 21
 KeyInput.Parent = KeyFrame
 
 local KeyInputCorner = Instance.new("UICorner")
@@ -284,7 +252,7 @@ KeySubmit.Font = Enum.Font.GothamBold
 KeySubmit.Text = "Submit Key"
 KeySubmit.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeySubmit.TextSize = 12
-KeySubmit.ZIndex = 31
+KeySubmit.ZIndex = 21
 KeySubmit.Parent = KeyFrame
 
 local KeySubmitCorner = Instance.new("UICorner")
@@ -296,7 +264,7 @@ KeySubmitCorner.Parent = KeySubmit
 ----------------------------------------------------
 local Menu = Instance.new("Frame")
 Menu.Name = "MiniMenu"
-Menu.Size = UDim2.fromOffset(220, 280)
+Menu.Size = UDim2.fromOffset(220, 315) -- Expanded to fit Fake PC button
 Menu.AnchorPoint = Vector2.new(0.5, 0.5)
 Menu.Position = UDim2.new(0.5, 0, 0.5, 0)
 Menu.BackgroundColor3 = Color3.fromRGB(10, 12, 16)
@@ -423,12 +391,11 @@ SaveConfigStroke.Thickness = 1
 SaveConfigStroke.Transparency = 0.5
 SaveConfigStroke.Parent = SaveConfigButton
 
-local ConfigFileName = "JAJAaHubConfig.json"
 SaveConfigButton.Activated:Connect(function()
     PlayClickSound()
     local Config = {
-        FOV = 120, TrackingStrength = 0.20, TeamCheck = true,
-        AimEnabled = false, ESPEnabled = false, FOVCircleEnabled = false
+        FOV = FOV, TrackingStrength = TrackingStrength, TeamCheck = TeamCheck,
+        AimEnabled = AimEnabled, ESPEnabled = ESPEnabled, FOVCircleEnabled = FOVCircleEnabled
     }
     if type(writefile) == "function" then
         pcall(function() writefile(ConfigFileName, HttpService:JSONEncode(Config)) end)
@@ -481,7 +448,175 @@ local AimButton = CreateStyledButton("AimAssistButton", 48, "Aim Assist: OFF")
 local ESPButton = CreateStyledButton("ESPButton", 84, "ESP: OFF")
 local TeamButton = CreateStyledButton("TeamCheckButton", 120, "Team Check: ON")
 
--- Menu Dragging
+local function MakeSlider(Name, LabelText, Y, Minimum, Maximum, InitialValue, FormatValue, OnChanged)
+    local Label = Instance.new("TextLabel")
+    Label.BackgroundTransparency = 1
+    Label.Position = UDim2.fromOffset(12, Y)
+    Label.Size = UDim2.new(1, -24, 0, 16)
+    Label.Font = Enum.Font.GothamSemibold
+    Label.TextColor3 = Color3.fromRGB(220, 220, 240)
+    Label.TextSize = 10
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    Label.Parent = Menu
+
+    local Track = Instance.new("TextButton")
+    Track.Position = UDim2.fromOffset(12, Y + 16)
+    Track.Size = UDim2.new(1, -24, 0, 10)
+    Track.BackgroundColor3 = Color3.fromRGB(18, 22, 28)
+    Track.Text = ""
+    Track.Parent = Menu
+
+    local TrackCorner = Instance.new("UICorner")
+    TrackCorner.CornerRadius = UDim.new(1, 0)
+    TrackCorner.Parent = Track
+
+    local Fill = Instance.new("Frame")
+    Fill.Size = UDim2.new((InitialValue - Minimum) / (Maximum - Minimum), 0, 1, 0)
+    Fill.BackgroundColor3 = Color3.fromRGB(0, 255, 150)
+    Fill.Parent = Track
+
+    local Knob = Instance.new("Frame")
+    Knob.AnchorPoint = Vector2.new(0.5, 0.5)
+    Knob.Position = UDim2.new((InitialValue - Minimum) / (Maximum - Minimum), 0, 0.5, 0)
+    Knob.Size = UDim2.fromOffset(12, 12)
+    Knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Knob.Parent = Track
+
+    local KnobCorner = Instance.new("UICorner")
+    KnobCorner.CornerRadius = UDim.new(1, 0)
+    KnobCorner.Parent = Knob
+
+    local Value = InitialValue
+    local Sliding = false
+
+    local function SetFromX(X)
+        local Width = math.max(1, Track.AbsoluteSize.X)
+        local Alpha = math.clamp((X - Track.AbsolutePosition.X) / Width, 0, 1)
+        Value = Minimum + (Maximum - Minimum) * Alpha
+        if Maximum > 10 then Value = math.floor(Value + 0.5) else Value = math.floor(Value * 100 + 0.5) / 100 end
+        local Percent = (Value - Minimum) / (Maximum - Minimum)
+        Fill.Size = UDim2.new(Percent, 0, 1, 0)
+        Knob.Position = UDim2.new(Percent, 0, 0.5, 0)
+        Label.Text = LabelText .. ": " .. FormatValue(Value)
+        OnChanged(Value)
+    end
+
+    Label.Text = LabelText .. ": " .. FormatValue(InitialValue)
+
+    Track.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+            Sliding = true
+            SetFromX(Input.Position.X)
+        end
+    end)
+    UserInputService.InputChanged:Connect(function(Input)
+        if Sliding and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
+            SetFromX(Input.Position.X)
+        end
+    end)
+    UserInputService.InputEnded:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+            Sliding = false
+        end
+    end)
+end
+
+MakeSlider("FOV", "FOV", 154, 20, 300, FOV, function(V) return tostring(V) .. " px" end, function(V)
+    FOV = V
+    FOVCircle.Size = UDim2.fromOffset(FOV * 2, FOV * 2)
+end)
+
+MakeSlider("Smoothness", "Smoothness", 196, 0.01, 0.50, TrackingStrength, function(V) return string.format("%.2f", V) end, function(V)
+    TrackingStrength = V
+end)
+
+local FOVCircleButton = CreateStyledButton("FOVCircleButton", 238, "FOV Circle: OFF")
+local FakePCButton = CreateStyledButton("FakePCButton", 274, "Fake PC Client: OFF")
+
+FOVCircleButton.Activated:Connect(function()
+    PlayClickSound()
+    FOVCircleEnabled = not FOVCircleEnabled
+    FOVCircle.Visible = FOVCircleEnabled
+    FOVCircleButton.Text = FOVCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
+    FOVCircleButton.BackgroundColor3 = FOVCircleEnabled and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
+end)
+
+FakePCButton.Activated:Connect(function()
+    PlayClickSound()
+    FakePCEnabled = not FakePCEnabled
+    FakePCButton.Text = FakePCEnabled and "Fake PC Client: ON" or "Fake PC Client: OFF"
+    FakePCButton.BackgroundColor3 = FakePCEnabled and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
+    
+    -- Simulates PC environment behaviors if active
+    if FakePCEnabled then
+        UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceShow
+    else
+        UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.None
+    end
+end)
+
+TeamButton.Activated:Connect(function()
+    PlayClickSound()
+    TeamCheck = not TeamCheck
+    TeamButton.Text = TeamCheck and "Team Check: ON" or "Team Check: OFF"
+    TeamButton.BackgroundColor3 = TeamCheck and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
+end)
+
+-- ESP Functions
+local function RemoveESP(Player)
+    local Highlight = ESPHighlights[Player]
+    if Highlight then Highlight:Destroy(); ESPHighlights[Player] = nil end
+end
+
+local function CreateESP(Player)
+    if Player == LocalPlayer then return end
+    local Character = Player.Character
+    if not Character then RemoveESP(Player); return end
+    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+    if not Humanoid or Humanoid.Health <= 0 then RemoveESP(Player); return end
+    
+    local Highlight = ESPHighlights[Player]
+    if not Highlight or Highlight.Parent ~= Character then
+        RemoveESP(Player)
+        Highlight = Instance.new("Highlight")
+        Highlight.Name = "JAJAaHubESP"
+        Highlight.Adornee = Character
+        Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        Highlight.FillTransparency = 1
+        Highlight.OutlineTransparency = 0.3
+        Highlight.Parent = Character
+        ESPHighlights[Player] = Highlight
+    end
+    Highlight.OutlineColor = isTeammate(Player) and Color3.fromRGB(80, 180, 255) or Color3.fromRGB(0, 255, 150)
+end
+
+local function RefreshESP()
+    if not ESPEnabled then
+        for Player in pairs(ESPHighlights) do RemoveESP(Player) end
+        return
+    end
+    for _, Player in ipairs(Players:GetPlayers()) do
+        if Player ~= LocalPlayer then CreateESP(Player) end
+    end
+end
+
+ESPButton.Activated:Connect(function()
+    PlayClickSound()
+    ESPEnabled = not ESPEnabled
+    ESPButton.Text = ESPEnabled and "ESP: ON" or "ESP: OFF"
+    ESPButton.BackgroundColor3 = ESPEnabled and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
+    RefreshESP()
+end)
+
+Players.PlayerRemoving:Connect(RemoveESP)
+Players.PlayerAdded:Connect(function(Player)
+    Player.CharacterAdded:Connect(function()
+        task.wait(0.2)
+        if ESPEnabled then CreateESP(Player) end
+    end)
+end)
+
+-- Main Menu Dragging
 local Dragging, DragStart, StartPosition, DragInput
 Menu.InputBegan:Connect(function(Input)
 	if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
@@ -505,4 +640,62 @@ UserInputService.InputChanged:Connect(function(Input)
 		local Delta = Input.Position - DragStart
 		Menu.Position = Menu.Position:Lerp(UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, StartPosition.Y.Scale, StartPosition.Y.Offset + Delta.Y), 0.35)
 	end
+end)
+
+-- Aim Assist Logic
+local function GetTarget()
+	local Camera = workspace.CurrentCamera
+	if not Camera then return nil end
+	local Viewport = Camera.ViewportSize
+	local Center = Vector2.new(Viewport.X / 2, Viewport.Y / 2)
+	local Closest = nil
+	local ClosestDistance = FOV
+
+	for _, Player in ipairs(Players:GetPlayers()) do
+		if Player ~= LocalPlayer and not (TeamCheck and isTeammate(Player)) then
+			local Character = Player.Character
+			if Character then
+				local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+				local Head = Character:FindFirstChild("Head")
+				if Humanoid and Humanoid.Health > 0 and Head then
+					local Position, OnScreen = Camera:WorldToViewportPoint(Head.Position)
+					if OnScreen and Position.Z > 0 then
+						local Point = Vector2.new(Position.X, Position.Y)
+						local Distance = (Point - Center).Magnitude
+						if Distance <= ClosestDistance then
+							local Origin = Camera.CFrame.Position
+							local Direction = Head.Position - Origin
+							local Params = RaycastParams.new()
+							Params.FilterType = Enum.RaycastFilterType.Exclude
+							Params.FilterDescendantsInstances = {LocalPlayer.Character}
+							Params.IgnoreWater = true
+							local Result = workspace:Raycast(Origin, Direction, Params)
+							local Visible = not WallCheck or (Result == nil or Result.Instance:IsDescendantOf(Character))
+							if Visible then
+								ClosestDistance = Distance
+								Closest = Head
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return Closest
+end
+
+AimButton.Activated:Connect(function()
+    PlayClickSound()
+	AimEnabled = not AimEnabled
+	AimButton.Text = AimEnabled and "Aim Assist: ON" or "Aim Assist: OFF"
+	AimButton.BackgroundColor3 = AimEnabled and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
+end)
+
+RunService.RenderStepped:Connect(function()
+	RefreshESP()
+	local Camera = workspace.CurrentCamera
+	if not Camera or not AimEnabled then return end
+	local Target = GetTarget()
+	if not Target then return end
+	Camera.CFrame = Camera.CFrame:Lerp(CFrame.lookAt(Camera.CFrame.Position, Target.Position), TrackingStrength)
 end)
