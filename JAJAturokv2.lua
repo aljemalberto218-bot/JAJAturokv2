@@ -16,8 +16,8 @@ local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- Approved Roblox Assets
-local ANIMAL_LOGO = "rbxassetid://6534551122" -- Approved Roblox Cat / Paw Logo
-local LOUD_EXECUTE_SOUND = "rbxassetid://9125298882" -- Loud approved Roblox sound effect
+local ANIMAL_LOGO = "rbxassetid://6534551122" 
+local LOUD_EXECUTE_SOUND = "rbxassetid://9125298882" 
 local CLICK_SOUND = "rbxassetid://9060469075"
 
 -- Play Loud Sound immediately on Execution
@@ -44,10 +44,49 @@ local function PlayClickSound()
     end)
 end
 
+-- ScreenGui Setup
+local OldGui = PlayerGui:FindFirstChild("JAJAaHub")
+if OldGui then OldGui:Destroy() end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "JAJAaHub"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.DisplayOrder = 100
+ScreenGui.Parent = PlayerGui
+
+----------------------------------------------------
+-- SASUKE INTRO SCREEN
+----------------------------------------------------
+local IntroFrame = Instance.new("Frame")
+IntroFrame.Size = UDim2.fromScale(1, 1)
+IntroFrame.BackgroundColor3 = Color3.fromRGB(5, 7, 10)
+IntroFrame.ZIndex = 50
+IntroFrame.Parent = ScreenGui
+
+local IntroText = Instance.new("TextLabel")
+IntroText.Size = UDim2.new(1, 0, 0, 50)
+IntroText.AnchorPoint = Vector2.new(0.5, 0.5)
+IntroText.Position = UDim2.fromScale(0.5, 0.5)
+IntroText.BackgroundTransparency = 1
+IntroText.Font = Enum.Font.GothamBold
+IntroText.Text = "⚡ SASUKE MODE ACTIVATED ⚡"
+IntroText.TextColor3 = Color3.fromRGB(0, 255, 150)
+IntroText.TextSize = 22
+IntroText.ZIndex = 51
+IntroText.Parent = IntroFrame
+
+task.delay(2, function()
+    if IntroFrame and IntroFrame.Parent then
+        IntroFrame:Destroy()
+    end
+end)
+
 -- Settings & Config
 local AimEnabled = false
 local ESPEnabled = false
 local FOVCircleEnabled = false
+local FakePCEnabled = false
 local FOV = 120
 local TrackingStrength = 0.20
 local WallCheck = true
@@ -123,17 +162,6 @@ local function isTeammate(targetPlayer)
     return getCustomTeamCount() >= 2 and localTeam == targetTeam
 end
 
--- ScreenGui Setup
-local OldGui = PlayerGui:FindFirstChild("JAJAaHub")
-if OldGui then OldGui:Destroy() end
-
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "JAJAaHub"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.IgnoreGuiInset = true
-ScreenGui.DisplayOrder = 100
-ScreenGui.Parent = PlayerGui
-
 -- FOV Circle
 local FOVCircle = Instance.new("Frame")
 FOVCircle.Name = "FOVCircle"
@@ -150,7 +178,7 @@ FOVCircleCorner.CornerRadius = UDim.new(1, 0)
 FOVCircleCorner.Parent = FOVCircle
 
 local FOVCircleStroke = Instance.new("UIStroke")
-FOVCircleStroke.Color = Color3.fromRGB(0, 255, 150) -- Neon Emerald
+FOVCircleStroke.Color = Color3.fromRGB(0, 255, 150)
 FOVCircleStroke.Thickness = 1.5
 FOVCircleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 FOVCircleStroke.Parent = FOVCircle
@@ -164,6 +192,7 @@ KeyFrame.Size = UDim2.fromOffset(280, 200)
 KeyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 KeyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 KeyFrame.BackgroundColor3 = Color3.fromRGB(10, 12, 16)
+KeyFrame.ZIndex = 20
 KeyFrame.Parent = ScreenGui
 
 local KeyCorner = Instance.new("UICorner")
@@ -180,6 +209,7 @@ KeyLogo.Size = UDim2.fromOffset(45, 45)
 KeyLogo.Position = UDim2.new(0.5, -22, 0, 12)
 KeyLogo.BackgroundTransparency = 1
 KeyLogo.Image = ANIMAL_LOGO
+KeyLogo.ZIndex = 21
 KeyLogo.Parent = KeyFrame
 
 local KeyTitle = Instance.new("TextLabel")
@@ -190,6 +220,7 @@ KeyTitle.Font = Enum.Font.GothamBold
 KeyTitle.Text = "JAJAa.a v1 hub Key System"
 KeyTitle.TextColor3 = Color3.fromRGB(240, 240, 255)
 KeyTitle.TextSize = 13
+KeyTitle.ZIndex = 21
 KeyTitle.Parent = KeyFrame
 
 local KeyInput = Instance.new("TextBox")
@@ -201,6 +232,7 @@ KeyInput.PlaceholderText = "Enter Key (JA69)..."
 KeyInput.Text = ""
 KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeyInput.TextSize = 12
+KeyInput.ZIndex = 21
 KeyInput.Parent = KeyFrame
 
 local KeyInputCorner = Instance.new("UICorner")
@@ -220,6 +252,7 @@ KeySubmit.Font = Enum.Font.GothamBold
 KeySubmit.Text = "Submit Key"
 KeySubmit.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeySubmit.TextSize = 12
+KeySubmit.ZIndex = 21
 KeySubmit.Parent = KeyFrame
 
 local KeySubmitCorner = Instance.new("UICorner")
@@ -231,12 +264,12 @@ KeySubmitCorner.Parent = KeySubmit
 ----------------------------------------------------
 local Menu = Instance.new("Frame")
 Menu.Name = "MiniMenu"
-Menu.Size = UDim2.fromOffset(220, 280)
+Menu.Size = UDim2.fromOffset(220, 315) -- Expanded to fit Fake PC button
 Menu.AnchorPoint = Vector2.new(0.5, 0.5)
 Menu.Position = UDim2.new(0.5, 0, 0.5, 0)
 Menu.BackgroundColor3 = Color3.fromRGB(10, 12, 16)
 Menu.ClipsDescendants = true
-Menu.Visible = false -- Hidden until Key verified
+Menu.Visible = false 
 Menu.Active = true
 Menu.Parent = ScreenGui
 
@@ -249,7 +282,7 @@ ToggleButton.BackgroundColor3 = Color3.fromRGB(15, 18, 24)
 ToggleButton.Image = ANIMAL_LOGO
 ToggleButton.ScaleType = Enum.ScaleType.Fit
 ToggleButton.ZIndex = 10
-ToggleButton.Visible = false -- Hidden until Key verified
+ToggleButton.Visible = false 
 ToggleButton.Active = true
 ToggleButton.Parent = ScreenGui
 
@@ -498,6 +531,7 @@ MakeSlider("Smoothness", "Smoothness", 196, 0.01, 0.50, TrackingStrength, functi
 end)
 
 local FOVCircleButton = CreateStyledButton("FOVCircleButton", 238, "FOV Circle: OFF")
+local FakePCButton = CreateStyledButton("FakePCButton", 274, "Fake PC Client: OFF")
 
 FOVCircleButton.Activated:Connect(function()
     PlayClickSound()
@@ -505,6 +539,20 @@ FOVCircleButton.Activated:Connect(function()
     FOVCircle.Visible = FOVCircleEnabled
     FOVCircleButton.Text = FOVCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
     FOVCircleButton.BackgroundColor3 = FOVCircleEnabled and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
+end)
+
+FakePCButton.Activated:Connect(function()
+    PlayClickSound()
+    FakePCEnabled = not FakePCEnabled
+    FakePCButton.Text = FakePCEnabled and "Fake PC Client: ON" or "Fake PC Client: OFF"
+    FakePCButton.BackgroundColor3 = FakePCEnabled and Color3.fromRGB(0, 120, 75) or Color3.fromRGB(18, 22, 28)
+    
+    -- Simulates PC environment behaviors if active
+    if FakePCEnabled then
+        UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceShow
+    else
+        UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.None
+    end
 end)
 
 TeamButton.Activated:Connect(function()
