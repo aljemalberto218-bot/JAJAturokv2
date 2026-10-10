@@ -9,14 +9,11 @@
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
-
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 local uiParent = player:WaitForChild("PlayerGui")
-
--- Anti-Kick Prerequisite
 local function runPrerequisite(url, name)
     local ok, result = pcall(function()
         local source = game:HttpGet(url)
@@ -29,24 +26,15 @@ local function runPrerequisite(url, name)
     end
     return ok
 end
-
 do
     local ANTI_KICK_URL = "https://raw.githubusercontent.com/SUUUUUS00000/MEGGD-Anti-kick/refs/heads/main/MEGGD%20Best%20Anti-kick.lua"
     runPrerequisite(ANTI_KICK_URL, "Anti-kick")
 end
 
--- =================================================================
--- KEY SYSTEM (Password: JAmalakas)
--- =================================================================
-local CORRECT_KEY = "JAmalakas"
 local KeyVerified = false
 local showMainUI = function() end
 
-local WHITE = Color3.fromRGB(255, 255, 255)
-local PANEL = Color3.fromRGB(12, 16, 24)
-local PANEL2 = Color3.fromRGB(22, 28, 42)
-local CYAN = Color3.fromRGB(0, 210, 255)
-
+-- Key System GUI
 do
     local keyGui = Instance.new("ScreenGui")
     keyGui.Name = "JAJAturokKeySystem"
@@ -58,121 +46,194 @@ do
     local overlay = Instance.new("Frame")
     overlay.Size = UDim2.fromScale(1, 1)
     overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    overlay.BackgroundTransparency = 0.4
+    overlay.BackgroundTransparency = 0.5
     overlay.BorderSizePixel = 0
     overlay.Parent = keyGui
 
     local box = Instance.new("Frame")
     box.AnchorPoint = Vector2.new(0.5, 0.5)
     box.Position = UDim2.fromScale(0.5, 0.5)
-    box.Size = UDim2.fromOffset(320, 210)
-    box.BackgroundColor3 = PANEL
+    box.Size = UDim2.fromOffset(340, 210)
+    box.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
     box.BorderSizePixel = 0
     box.Parent = overlay
-
-    Instance.new("UICorner", box).CornerRadius = UDim.new(0, 14)
+    Instance.new("UICorner", box).CornerRadius = UDim.new(0, 16)
 
     local stroke = Instance.new("UIStroke")
-    stroke.Color = CYAN
+    stroke.Color = Color3.fromRGB(125, 65, 205)
     stroke.Thickness = 1.5
-    stroke.Transparency = 0.3
+    stroke.Transparency = 0.2
     stroke.Parent = box
 
+    local title = Instance.new("TextLabel")
+    title.Position = UDim2.fromOffset(20, 20)
+    title.Size = UDim2.new(1, -40, 0, 25)
+    title.BackgroundTransparency = 1
+    title.Text = "🐺 JAJAturok Hub - Key System"
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 16
+    title.TextXAlignment = Enum.TextXAlignment.Left
+    title.Parent = box
+
+    local subtitle = Instance.new("TextLabel")
+    subtitle.Position = UDim2.fromOffset(20, 48)
+    subtitle.Size = UDim2.new(1, -40, 0, 20)
+    subtitle.BackgroundTransparency = 1
+    subtitle.Text = "Please enter your access key to continue."
+    subtitle.TextColor3 = Color3.fromRGB(160, 165, 185)
+    subtitle.Font = Enum.Font.Gotham
+    subtitle.TextSize = 11
+    subtitle.TextXAlignment = Enum.TextXAlignment.Left
+    subtitle.Parent = box
+
+    local textBoxFrame = Instance.new("Frame")
+    textBoxFrame.Position = UDim2.fromOffset(20, 85)
+    textBoxFrame.Size = UDim2.new(1, -40, 0, 44)
+    textBoxFrame.BackgroundColor3 = Color3.fromRGB(22, 22, 32)
+    textBoxFrame.BorderSizePixel = 0
+    textBoxFrame.Parent = box
+    Instance.new("UICorner", textBoxFrame).CornerRadius = UDim.new(0, 10)
+
+    local textStroke = Instance.new("UIStroke")
+    textStroke.Color = Color3.fromRGB(65, 65, 90)
+    textStroke.Thickness = 1
+    textStroke.Parent = textBoxFrame
+
+    local textBox = Instance.new("TextBox")
+    textBox.Position = UDim2.fromOffset(12, 0)
+    textBox.Size = UDim2.new(1, -24, 1, 0)
+    textBox.BackgroundTransparency = 1
+    textBox.PlaceholderText = "Enter key (Password: JA69)"
+    textBox.PlaceholderColor3 = Color3.fromRGB(100, 105, 125)
+    textBox.Text = ""
+    textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textBox.Font = Enum.Font.GothamMedium
+    textBox.TextSize = 12
+    textBox.ClearTextOnFocus = false
+    textBox.TextXAlignment = Enum.TextXAlignment.Left
+    textBox.Parent = textBoxFrame
+
+    local submitBtn = Instance.new("TextButton")
+    submitBtn.Position = UDim2.fromOffset(20, 142)
+    submitBtn.Size = UDim2.new(1, -40, 0, 42)
+    submitBtn.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
+    submitBtn.BorderSizePixel = 0
+    submitBtn.AutoButtonColor = false
+    submitBtn.Text = "VERIFY KEY"
+    submitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    submitBtn.Font = Enum.Font.GothamBold
+    submitBtn.TextSize = 12
+    submitBtn.Parent = box
+    Instance.new("UICorner", submitBtn).CornerRadius = UDim.new(0, 10)
+
+    local verified = false
+    submitBtn.MouseButton1Click:Connect(function()
+        if textBox.Text == "JA69" then
+            verified = true
+            KeyVerified = true
+            keyGui:Destroy()
+        else
+            textStroke.Color = Color3.fromRGB(235, 65, 65)
+            textBox.Text = ""
+            textBox.PlaceholderText = "Incorrect Key! Try again (JA69)"
+            task.delay(1.5, function()
+                if textStroke and textStroke.Parent then
+                    textStroke.Color = Color3.fromRGB(65, 65, 90)
+                end
+            end)
+        end
+    end)
+
+    repeat task.wait() until verified
+end
+
+do
+    local promptGui = Instance.new("ScreenGui")
+    promptGui.Name = "JAJAturokPCClientPrompt"
+    promptGui.ResetOnSpawn = false
+    promptGui.IgnoreGuiInset = true
+    promptGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    promptGui.Parent = uiParent
+    local overlay = Instance.new("Frame")
+    overlay.Size = UDim2.fromScale(1, 1)
+    overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    overlay.BackgroundTransparency = 0.35
+    overlay.BorderSizePixel = 0
+    overlay.Parent = promptGui
+    local box = Instance.new("Frame")
+    box.AnchorPoint = Vector2.new(0.5, 0.5)
+    box.Position = UDim2.fromScale(0.5, 0.5)
+    box.Size = UDim2.fromOffset(330, 190)
+    box.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
+    box.BorderSizePixel = 0
+    box.Parent = overlay
+    Instance.new("UICorner", box).CornerRadius = UDim.new(0, 14)
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(125, 65, 205)
+    stroke.Thickness = 1.5
+    stroke.Transparency = 0.25
+    stroke.Parent = box
     local title = Instance.new("TextLabel")
     title.Position = UDim2.fromOffset(20, 18)
     title.Size = UDim2.new(1, -40, 0, 25)
     title.BackgroundTransparency = 1
-    title.Text = "JAJAturok Hub — Key System"
-    title.TextColor3 = WHITE
+    title.Text = "🐺 Fake PC Client"
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
     title.Font = Enum.Font.GothamBold
-    title.TextSize = 15
+    title.TextSize = 17
     title.TextXAlignment = Enum.TextXAlignment.Left
     title.Parent = box
-
-    local sub = Instance.new("TextLabel")
-    sub.Position = UDim2.fromOffset(20, 42)
-    sub.Size = UDim2.new(1, -40, 0, 18)
-    sub.BackgroundTransparency = 1
-    sub.Text = "Enter the password to access the script:"
-    sub.TextColor3 = Color3.fromRGB(170, 180, 200)
-    sub.Font = Enum.Font.Gotham
-    sub.TextSize = 11
-    sub.TextXAlignment = Enum.TextXAlignment.Left
-    sub.Parent = box
-
-    local keyInput = Instance.new("TextBox")
-    keyInput.Position = UDim2.fromOffset(20, 75)
-    keyInput.Size = UDim2.new(1, -40, 0, 40)
-    keyInput.BackgroundColor3 = PANEL2
-    keyInput.BorderSizePixel = 0
-    keyInput.Text = ""
-    keyInput.PlaceholderText = "Enter Key Here..."
-    keyInput.PlaceholderColor3 = Color3.fromRGB(110, 120, 140)
-    keyInput.TextColor3 = WHITE
-    keyInput.Font = Enum.Font.GothamMedium
-    keyInput.TextSize = 12
-    keyInput.ClearTextOnFocus = false
-    keyInput.Parent = box
-
-    Instance.new("UICorner", keyInput).CornerRadius = UDim.new(0, 8)
-
-    local submitBtn = Instance.new("TextButton")
-    submitBtn.Position = UDim2.fromOffset(20, 135)
-    submitBtn.Size = UDim2.new(1, -40, 0, 42)
-    submitBtn.BackgroundColor3 = CYAN
-    submitBtn.BorderSizePixel = 0
-    submitBtn.AutoButtonColor = false
-    submitBtn.Text = "CHECK KEY"
-    submitBtn.TextColor3 = Color3.fromRGB(10, 15, 25)
-    submitBtn.Font = Enum.Font.GothamBold
-    submitBtn.TextSize = 12
-    submitBtn.Parent = box
-
-    Instance.new("UICorner", submitBtn).CornerRadius = UDim.new(0, 8)
-
-    local statusLabel = Instance.new("TextLabel")
-    statusLabel.Position = UDim2.fromOffset(20, 182)
-    statusLabel.Size = UDim2.new(1, -40, 0, 18)
-    statusLabel.BackgroundTransparency = 1
-    statusLabel.Text = ""
-    statusLabel.TextColor3 = Color3.fromRGB(235, 65, 65)
-    statusLabel.Font = Enum.Font.GothamBold
-    statusLabel.TextSize = 10
-    statusLabel.Parent = box
-
-    local function verifyKey()
-        if keyInput.Text == CORRECT_KEY then
-            KeyVerified = true
-            statusLabel.TextColor3 = Color3.fromRGB(0, 210, 255)
-            statusLabel.Text = "Correct Key! Loading..."
-            task.wait(0.5)
-            keyGui:Destroy()
-            showMainUI()
-        else
-            statusLabel.TextColor3 = Color3.fromRGB(235, 65, 65)
-            statusLabel.Text = "Incorrect Key! Try again."
-        end
+    local message = Instance.new("TextLabel")
+    message.Position = UDim2.fromOffset(20, 52)
+    message.Size = UDim2.new(1, -40, 0, 48)
+    message.BackgroundTransparency = 1
+    message.Text = "Do you want to use the Fake PC Client?"
+    message.TextColor3 = Color3.fromRGB(190, 195, 210)
+    message.Font = Enum.Font.Gotham
+    message.TextSize = 11
+    message.TextWrapped = true
+    message.TextXAlignment = Enum.TextXAlignment.Left
+    message.Parent = box
+    local yes = Instance.new("TextButton")
+    yes.Position = UDim2.fromOffset(20, 122)
+    yes.Size = UDim2.new(0.5, -25, 0, 42)
+    yes.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
+    yes.BorderSizePixel = 0
+    yes.AutoButtonColor = false
+    yes.Text = "YES"
+    yes.TextColor3 = Color3.fromRGB(255, 255, 255)
+    yes.Font = Enum.Font.GothamBold
+    yes.TextSize = 12
+    yes.Parent = box
+    Instance.new("UICorner", yes).CornerRadius = UDim.new(0, 9)
+    local no = Instance.new("TextButton")
+    no.Position = UDim2.new(0.5, 5, 0, 122)
+    no.Size = UDim2.new(0.5, -25, 0, 42)
+    no.BackgroundColor3 = Color3.fromRGB(22, 22, 32)
+    no.BorderSizePixel = 0
+    no.AutoButtonColor = false
+    no.Text = "NO"
+    no.TextColor3 = Color3.fromRGB(255, 255, 255)
+    no.Font = Enum.Font.GothamBold
+    no.TextSize = 12
+    no.Parent = box
+    Instance.new("UICorner", no).CornerRadius = UDim.new(0, 9)
+    local choice = nil
+    yes.MouseButton1Click:Connect(function() choice = true end)
+    no.MouseButton1Click:Connect(function() choice = false end)
+    repeat task.wait() until choice ~= nil
+    promptGui:Destroy()
+    if choice then
+        local DEVICE_SPOOFER_URL = "https://raw.githubusercontent.com/yBloodz/Free-scripts/refs/heads/main/MVSD-DEVICE-SPOOFER"
+        runPrerequisite(DEVICE_SPOOFER_URL, "Device Spoofer")
     end
-
-    submitBtn.MouseButton1Click:Connect(verifyKey)
-    keyInput.FocusLost:Connect(function(enterPressed)
-        if enterPressed then
-            verifyKey()
-        end
-    end)
-
-    repeat task.wait() until KeyVerified
 end
-
--- =================================================================
--- MAIN SCRIPT EXECUTION
--- =================================================================
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 local HttpService = game:GetService("HttpService")
 local LocalPlayer = player
 local Camera = Workspace.CurrentCamera
-
 local Config = {
     TrackingEnabled = false,
     Smoothness = 0.25,
@@ -189,7 +250,7 @@ local Config = {
     NameTags = false,
     HealthBar = false,
     Distance = false,
-    BoxColor = Color3.fromRGB(0, 210, 255),
+    BoxColor = Color3.fromRGB(155, 90, 255),
     WallCheck = true,
     BigHead = false,
     BigHeadSize = 5,
@@ -228,8 +289,8 @@ local Config = {
     SA2_FovRadius = 100,
     SA2_FovVisible = true,
     SA2_FovTransparency = 0.90,
-    SA2_FovColor = Color3.fromRGB(0, 210, 255),
-    SA2_FovTargetColor = Color3.fromRGB(0, 210, 255),
+    SA2_FovColor = Color3.fromRGB(160, 90, 255),
+    SA2_FovTargetColor = Color3.fromRGB(160, 90, 255),
     SA2_ThreeSixtyMode = false,
     SA2_TargetRange = 500,
     SA2_Prediction = 0,
@@ -242,11 +303,10 @@ local Config = {
     TriggerbotInterval = 0.01,
     TriggerbotFOV = 10,
     TriggerbotFOVVisible = false,
-    TriggerbotFOVColor = Color3.fromRGB(0, 210, 255),
-    TriggerbotFOVTargetColor = Color3.fromRGB(0, 210, 255),
+    TriggerbotFOVColor = Color3.fromRGB(160, 90, 255),
+    TriggerbotFOVTargetColor = Color3.fromRGB(160, 90, 255),
     TriggerbotFOVTransparency = 0.90,
 }
-
 local Connections = {}
 local ESP = {}
 local ESPFolder = Workspace:FindFirstChild("JAJAturokESP")
@@ -255,13 +315,11 @@ if not ESPFolder then
     ESPFolder.Name = "JAJAturokESP"
     ESPFolder.Parent = Workspace
 end
-
 local function connect(signal, callback)
     local c = signal:Connect(callback)
     table.insert(Connections, c)
     return c
 end
-
 local function notify(text)
     local gui = LocalPlayer:FindFirstChildOfClass("PlayerGui")
     if not gui then return end
@@ -269,18 +327,18 @@ local function notify(text)
     if not holder then return end
     local label = Instance.new("TextLabel")
     label.Size = UDim2.new(0, 260, 0, 40)
-    label.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
+    label.BackgroundColor3 = Color3.fromRGB(18, 20, 26)
     label.BackgroundTransparency = 0.05
     label.BorderSizePixel = 0
-    label.TextColor3 = Color3.fromRGB(240, 245, 255)
+    label.TextColor3 = Color3.fromRGB(240, 243, 250)
     label.TextSize = 13
     label.Font = Enum.Font.GothamMedium
     label.Text = text
     label.Parent = holder
     Instance.new("UICorner", label).CornerRadius = UDim.new(0, 10)
     local stroke = Instance.new("UIStroke")
-    stroke.Color = Color3.fromRGB(0, 210, 255)
-    stroke.Transparency = 0.4
+    stroke.Color = Color3.fromRGB(155, 90, 255)
+    stroke.Transparency = 0.3
     stroke.Parent = label
     local list = holder:FindFirstChildOfClass("UIListLayout")
     if list then
@@ -297,7 +355,6 @@ local function notify(text)
         end
     end)
 end
-
 local function getCharacter(player)
     if not player then return nil end
     local character = player.Character
@@ -309,7 +366,6 @@ local function getCharacter(player)
     end
     return character, humanoid, root
 end
-
 local function getAimPart(character)
     if Config.AimPart == "Head" then
         return character:FindFirstChild("Head")
@@ -321,14 +377,12 @@ local function getAimPart(character)
         return character:FindFirstChild("HumanoidRootPart")
     end
 end
-
 local function isEnemy(player)
     if not player or player == LocalPlayer then
         return false
     end
     return true
 end
-
 local function hasLineOfSight(character, targetPart)
     if not Config.WallCheck then
         return true
@@ -345,7 +399,6 @@ local function hasLineOfSight(character, targetPart)
     local result = Workspace:Raycast(origin, direction, params)
     return result == nil
 end
-
 local function getTarget(fovRadius)
     local center = Camera.ViewportSize / 2
     local bestPlayer = nil
@@ -373,7 +426,6 @@ local function getTarget(fovRadius)
     end
     return bestPlayer
 end
-
 local TriggerbotLastShot = 0
 local TriggerbotFOVCircle = nil
 local TriggerbotFOVStroke = nil
@@ -398,7 +450,6 @@ local function triggerbotShoot()
         end
     end)
 end
-
 connect(RunService.Heartbeat, function()
     if not KeyVerified or not Config.Triggerbot then
         if TriggerbotFOVCircle then TriggerbotFOVCircle.Visible = false end
@@ -422,13 +473,11 @@ connect(RunService.Heartbeat, function()
         triggerbotShoot()
     end
 end)
-
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local old = PlayerGui:FindFirstChild("PlayerVisualizationTool")
 if old then
     old:Destroy()
 end
-
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "PlayerVisualizationTool"
 ScreenGui.ResetOnSpawn = false
@@ -436,7 +485,6 @@ ScreenGui.IgnoreGuiInset = true
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Enabled = false
 ScreenGui.Parent = PlayerGui
-
 TriggerbotFOVCircle = Instance.new("Frame")
 TriggerbotFOVCircle.Name = "TriggerbotFOV"
 TriggerbotFOVCircle.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -446,17 +494,14 @@ TriggerbotFOVCircle.Size = UDim2.fromOffset(Config.TriggerbotFOV * 2, Config.Tri
 TriggerbotFOVCircle.Visible = false
 TriggerbotFOVCircle.Parent = ScreenGui
 Instance.new("UICorner", TriggerbotFOVCircle).CornerRadius = UDim.new(1, 0)
-
 TriggerbotFOVStroke = Instance.new("UIStroke")
 TriggerbotFOVStroke.Thickness = 1
 TriggerbotFOVStroke.Color = Config.TriggerbotFOVColor
 TriggerbotFOVStroke.Transparency = 1 - Config.TriggerbotFOVTransparency
 TriggerbotFOVStroke.Parent = TriggerbotFOVCircle
-
 showMainUI = function()
     ScreenGui.Enabled = true
 end
-
 local NotificationHolder = Instance.new("Frame")
 NotificationHolder.Name = "PlayerToolNotifications"
 NotificationHolder.AnchorPoint = Vector2.new(1, 1)
@@ -464,37 +509,32 @@ NotificationHolder.Position = UDim2.new(1, -16, 1, -16)
 NotificationHolder.Size = UDim2.new(0, 260, 0, 200)
 NotificationHolder.BackgroundTransparency = 1
 NotificationHolder.Parent = ScreenGui
-
 local notificationLayout = Instance.new("UIListLayout")
 notificationLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 notificationLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
 notificationLayout.Padding = UDim.new(0, 8)
 notificationLayout.Parent = NotificationHolder
-
 local FOVCircle = Instance.new("Frame")
 FOVCircle.Name = "FOVCircle"
 FOVCircle.AnchorPoint = Vector2.new(0.5, 0.5)
 FOVCircle.BackgroundTransparency = 1
 FOVCircle.Size = UDim2.fromOffset(Config.FOVSize * 2, Config.FOVSize * 2)
 FOVCircle.Parent = ScreenGui
-
 local fovCorner = Instance.new("UICorner")
 fovCorner.CornerRadius = UDim.new(1, 0)
 fovCorner.Parent = FOVCircle
-
 local fovStroke = Instance.new("UIStroke")
 fovStroke.Thickness = 1.5
-fovStroke.Color = Color3.fromRGB(0, 210, 255)
+fovStroke.Color = Color3.fromRGB(155, 90, 255)
 fovStroke.Transparency = 0.2
 fovStroke.Parent = FOVCircle
-
 local AimToggle = Instance.new("TextButton")
 AimToggle.Name = "AimToggle"
 AimToggle.AnchorPoint = Vector2.new(0, 1)
 AimToggle.Position = UDim2.new(0, 75, 1, -15)
 AimToggle.Size = UDim2.fromOffset(48, 48)
 AimToggle.BackgroundColor3 = Config.TrackingEnabled
-    and Color3.fromRGB(0, 180, 255)
+    and Color3.fromRGB(145, 75, 235)
     or Color3.fromRGB(235, 65, 65)
 AimToggle.Text = "AIM"
 AimToggle.TextColor3 = Color3.new(1, 1, 1)
@@ -504,14 +544,12 @@ AimToggle.AutoButtonColor = false
 AimToggle.Visible = Config.ShowAimButton
 AimToggle.Parent = ScreenGui
 Instance.new("UICorner", AimToggle).CornerRadius = UDim.new(0, 12)
-
 local aimButtonLocked = false
 local lockPanelOpen = false
 local aimDragging = false
 local aimDragStart
 local aimStartPosition
 local aimMoved = false
-
 connect(AimToggle.InputBegan, function(input)
     if aimButtonLocked then return end
     if input.UserInputType == Enum.UserInputType.MouseButton1
@@ -529,7 +567,6 @@ connect(AimToggle.InputBegan, function(input)
         end)
     end
 end)
-
 connect(UserInputService.InputChanged, function(input)
     if not aimButtonLocked and aimDragging and (
         input.UserInputType == Enum.UserInputType.MouseMovement
@@ -548,72 +585,63 @@ connect(UserInputService.InputChanged, function(input)
         AimToggle.Position = AimToggle.Position:Lerp(targetPosition, 0.32)
     end
 end)
-
 local hideMainMenu
 local Main = Instance.new("Frame")
 Main.Name = "MainWindow"
 Main.AnchorPoint = Vector2.new(0.5, 0.5)
 Main.Position = UDim2.fromScale(0.5, 0.5)
 Main.Size = UDim2.fromOffset(410, 305)
-Main.BackgroundColor3 = Color3.fromRGB(12, 16, 24)
+Main.BackgroundColor3 = Color3.fromRGB(12, 13, 18)
 Main.BorderSizePixel = 0
 Main.Parent = ScreenGui
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 14)
-
 local MainStroke = Instance.new("UIStroke")
-MainStroke.Color = Color3.fromRGB(0, 150, 200)
-MainStroke.Thickness = 1.2
+MainStroke.Color = Color3.fromRGB(85, 45, 140)
+MainStroke.Thickness = 1.5
 MainStroke.Parent = Main
-
 local Scale = Instance.new("UIScale")
 Scale.Scale = 1
 Scale.Parent = Main
-
 local Header = Instance.new("Frame")
 Header.Size = UDim2.new(1, 0, 0, 58)
-Header.BackgroundColor3 = Color3.fromRGB(16, 22, 34)
+Header.BackgroundColor3 = Color3.fromRGB(18, 16, 26)
 Header.BorderSizePixel = 0
 Header.Parent = Main
-
 local headerCorner = Instance.new("UICorner")
 headerCorner.CornerRadius = UDim.new(0, 14)
 headerCorner.Parent = Header
-
 local HeaderFix = Instance.new("Frame")
 HeaderFix.Position = UDim2.new(0, 0, 1, -10)
 HeaderFix.Size = UDim2.new(1, 0, 0, 10)
-HeaderFix.BackgroundColor3 = Color3.fromRGB(16, 22, 34)
+HeaderFix.BackgroundColor3 = Color3.fromRGB(18, 16, 26)
 HeaderFix.BorderSizePixel = 0
 HeaderFix.Parent = Header
-
 local HeaderTitle = Instance.new("TextLabel")
 HeaderTitle.BackgroundTransparency = 1
 HeaderTitle.Position = UDim2.fromOffset(18, 9)
 HeaderTitle.Size = UDim2.new(1, -80, 0, 24)
 HeaderTitle.Font = Enum.Font.GothamBold
-HeaderTitle.Text = "JAJAturok Hub"
-HeaderTitle.TextColor3 = Color3.fromRGB(250, 252, 255)
+HeaderTitle.Text = "🐺 JAJAturok Hub"
+HeaderTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 HeaderTitle.TextSize = 18
 HeaderTitle.TextXAlignment = Enum.TextXAlignment.Left
 HeaderTitle.Parent = Header
-
 local HeaderSub = Instance.new("TextLabel")
 HeaderSub.BackgroundTransparency = 1
 HeaderSub.Position = UDim2.fromOffset(19, 32)
 HeaderSub.Size = UDim2.new(1, -80, 0, 16)
 HeaderSub.Font = Enum.Font.Gotham
 HeaderSub.Text = "developed by JAJAturok"
-HeaderSub.TextColor3 = Color3.fromRGB(0, 200, 240)
+HeaderSub.TextColor3 = Color3.fromRGB(160, 120, 210)
 HeaderSub.TextSize = 10
 HeaderSub.TextXAlignment = Enum.TextXAlignment.Left
 HeaderSub.Parent = Header
-
 local HideButton = Instance.new("TextButton")
 HideButton.Name = "HideButton"
 HideButton.AnchorPoint = Vector2.new(1, 0.5)
 HideButton.Position = UDim2.new(1, -14, 0.5, 0)
 HideButton.Size = UDim2.fromOffset(34, 34)
-HideButton.BackgroundColor3 = Color3.fromRGB(22, 30, 48)
+HideButton.BackgroundColor3 = Color3.fromRGB(26, 22, 38)
 HideButton.Text = "—"
 HideButton.TextColor3 = Color3.fromRGB(220, 225, 240)
 HideButton.TextSize = 16
@@ -623,11 +651,9 @@ HideButton.Active = true
 HideButton.ZIndex = 20
 HideButton.Parent = Header
 Instance.new("UICorner", HideButton).CornerRadius = UDim.new(0, 10)
-
 connect(HideButton.Activated, function()
     hideMainMenu()
 end)
-
 local dragging = false
 local dragStart
 local startPosition
@@ -646,7 +672,6 @@ connect(Header.InputBegan, function(input)
         end)
     end
 end)
-
 connect(UserInputService.InputChanged, function(input)
     if dragging and (
         input.UserInputType == Enum.UserInputType.MouseMovement
@@ -662,38 +687,33 @@ connect(UserInputService.InputChanged, function(input)
         Main.Position = Main.Position:Lerp(targetPosition, 0.28)
     end
 end)
-
 local Sidebar = Instance.new("Frame")
 Sidebar.Position = UDim2.fromOffset(12, 68)
 Sidebar.Size = UDim2.fromOffset(102, 225)
 Sidebar.BackgroundTransparency = 1
 Sidebar.Parent = Main
-
 local TabLayout = Instance.new("UIListLayout")
 TabLayout.Padding = UDim.new(0, 8)
 TabLayout.Parent = Sidebar
-
 local Content = Instance.new("ScrollingFrame")
 Content.Position = UDim2.fromOffset(124, 68)
 Content.Size = UDim2.new(1, -136, 1, -78)
-Content.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
+Content.BackgroundColor3 = Color3.fromRGB(15, 14, 21)
 Content.BorderSizePixel = 0
 Content.ClipsDescendants = true
 Content.CanvasSize = UDim2.fromOffset(0, 0)
 Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
 Content.ScrollingDirection = Enum.ScrollingDirection.Y
 Content.ScrollBarThickness = 4
-Content.ScrollBarImageColor3 = Color3.fromRGB(0, 210, 255)
+Content.ScrollBarImageColor3 = Color3.fromRGB(155, 90, 255)
 Content.Active = true
 Content.ScrollBarImageTransparency = 0.3
 Content.ScrollingEnabled = true
 Content.Parent = Main
 Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 10)
-
 local updateRealHitbox
 local Tabs = {}
 local CurrentTab
-
 local function clearContent()
     for _, child in ipairs(Content:GetChildren()) do
         if not child:IsA("UICorner") then
@@ -701,7 +721,6 @@ local function clearContent()
         end
     end
 end
-
 local LucideIcons
 pcall(function()
     local source = game:HttpGet(
@@ -709,7 +728,6 @@ pcall(function()
     )
     LucideIcons = loadstring(source)()
 end)
-
 local function getLucideAsset(iconName)
     if not LucideIcons or type(LucideIcons.GetAsset) ~= "function" then
         return nil
@@ -720,7 +738,6 @@ local function getLucideAsset(iconName)
     end
     return asset
 end
-
 local function createFallbackIcon(parent, iconName)
     local holder = Instance.new("Frame")
     holder.Name = "Icon"
@@ -800,7 +817,6 @@ local function createFallbackIcon(parent, iconName)
     end
     return holder
 end
-
 local function createTabIcon(parent, iconName)
     local holder = Instance.new("ImageLabel")
     holder.Name = "Icon"
@@ -835,11 +851,10 @@ local function createTabIcon(parent, iconName)
     holder:Destroy()
     return createFallbackIcon(parent, iconName)
 end
-
 local function createTabButton(name, iconName)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(1, 0, 0, 36)
-    button.BackgroundColor3 = Color3.fromRGB(20, 26, 38)
+    button.BackgroundColor3 = Color3.fromRGB(19, 18, 28)
     button.BorderSizePixel = 0
     button.AutoButtonColor = false
     button.Text = ""
@@ -852,7 +867,7 @@ local function createTabButton(name, iconName)
     textLabel.Size = UDim2.new(1, -41, 1, 0)
     textLabel.BackgroundTransparency = 1
     textLabel.Text = name
-    textLabel.TextColor3 = Color3.fromRGB(140, 150, 175)
+    textLabel.TextColor3 = Color3.fromRGB(160, 150, 185)
     textLabel.TextSize = 11
     textLabel.Font = Enum.Font.GothamMedium
     textLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -860,13 +875,12 @@ local function createTabButton(name, iconName)
     Tabs[name] = button
     return button
 end
-
 local function selectTab(name, builder)
     CurrentTab = name
     for tabName, button in pairs(Tabs) do
         local active = tabName == name
-        local textColor = active and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(140, 150, 175)
-        button.BackgroundColor3 = active and Color3.fromRGB(0, 160, 220) or Color3.fromRGB(20, 26, 38)
+        local textColor = active and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(160, 150, 185)
+        button.BackgroundColor3 = active and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(19, 18, 28)
         local label = button:FindFirstChild("Label")
         if label then
             label.TextColor3 = textColor
@@ -876,7 +890,6 @@ local function selectTab(name, builder)
     Content.CanvasPosition = Vector2.new(0, 0)
     builder()
 end
-
 local function addPadding(parent)
     local padding = Instance.new("UIPadding")
     padding.PaddingTop = UDim.new(0, 12)
@@ -885,7 +898,6 @@ local function addPadding(parent)
     padding.PaddingRight = UDim.new(0, 12)
     padding.Parent = parent
 end
-
 local function createContentLayout()
     local list = Instance.new("UIListLayout")
     list.Padding = UDim.new(0, 8)
@@ -894,24 +906,22 @@ local function createContentLayout()
     addPadding(Content)
     return list
 end
-
 local function createSection(text)
     local label = Instance.new("TextLabel")
     label.Size = UDim2.new(1, 0, 0, 24)
     label.BackgroundTransparency = 1
     label.Text = string.upper(text)
-    label.TextColor3 = Color3.fromRGB(0, 210, 255)
+    label.TextColor3 = Color3.fromRGB(180, 110, 255)
     label.TextSize = 10
     label.Font = Enum.Font.GothamBold
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.Parent = Content
     return label
 end
-
 local function createToggle(text, value, callback)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(1, 0, 0, 34)
-    button.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+    button.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
     button.BorderSizePixel = 0
     button.AutoButtonColor = false
     button.Text = ""
@@ -920,8 +930,8 @@ local function createToggle(text, value, callback)
     local check = Instance.new("Frame")
     check.Position = UDim2.fromOffset(10, 8)
     check.Size = UDim2.fromOffset(18, 18)
-    check.BackgroundColor3 = value and Color3.fromRGB(0, 180, 255)
-        or Color3.fromRGB(38, 48, 65)
+    check.BackgroundColor3 = value and Color3.fromRGB(125, 65, 205)
+        or Color3.fromRGB(38, 35, 50)
     check.BorderSizePixel = 0
     check.Parent = button
     Instance.new("UICorner", check).CornerRadius = UDim.new(0, 5)
@@ -947,14 +957,13 @@ local function createToggle(text, value, callback)
     connect(button.MouseButton1Click, function()
         state = not state
         TweenService:Create(check, TweenInfo.new(0.15), {
-            BackgroundColor3 = state and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+            BackgroundColor3 = state and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
         }):Play()
         checkText.Text = state and "✓" or ""
         callback(state)
     end)
     return button
 end
-
 local function createSimpleToggle(text, value, callback)
     local holder = Instance.new("Frame")
     holder.Size = UDim2.new(1, 0, 0, 42)
@@ -962,7 +971,7 @@ local function createSimpleToggle(text, value, callback)
     holder.Parent = Content
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(1, 0, 0, 42)
-    button.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+    button.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
     button.BorderSizePixel = 0
     button.AutoButtonColor = false
     button.Text = ""
@@ -971,7 +980,7 @@ local function createSimpleToggle(text, value, callback)
     local check = Instance.new("Frame")
     check.Position = UDim2.fromOffset(10, 12)
     check.Size = UDim2.fromOffset(18, 18)
-    check.BackgroundColor3 = value and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+    check.BackgroundColor3 = value and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
     check.BorderSizePixel = 0
     check.Parent = button
     Instance.new("UICorner", check).CornerRadius = UDim.new(0, 5)
@@ -996,17 +1005,16 @@ local function createSimpleToggle(text, value, callback)
     local state = value
     connect(button.MouseButton1Click, function()
         state = not state
-        check.BackgroundColor3 = state and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+        check.BackgroundColor3 = state and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
         checkText.Text = state and "✓" or ""
         callback(state)
     end)
     return holder
 end
-
 local function createDropdown(text, options, selected, callback)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(1, 0, 0, 42)
-    button.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+    button.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
     button.BorderSizePixel = 0
     button.AutoButtonColor = false
     button.Text = ""
@@ -1027,7 +1035,7 @@ local function createDropdown(text, options, selected, callback)
     valueLabel.Size = UDim2.new(0.6, -12, 1, 0)
     valueLabel.BackgroundTransparency = 1
     valueLabel.Text = selected
-    valueLabel.TextColor3 = Color3.fromRGB(0, 210, 255)
+    valueLabel.TextColor3 = Color3.fromRGB(180, 110, 255)
     valueLabel.TextSize = 11
     valueLabel.Font = Enum.Font.GothamBold
     valueLabel.TextXAlignment = Enum.TextXAlignment.Right
@@ -1050,7 +1058,7 @@ local function createDropdown(text, options, selected, callback)
         menu = Instance.new("Frame")
         menu.ZIndex = 50
         menu.ClipsDescendants = true
-        menu.BackgroundColor3 = Color3.fromRGB(18, 24, 36)
+        menu.BackgroundColor3 = Color3.fromRGB(18, 17, 26)
         menu.BorderSizePixel = 0
         menu.Parent = ScreenGui
         Instance.new("UICorner", menu).CornerRadius = UDim.new(0, 8)
@@ -1080,7 +1088,6 @@ local function createDropdown(text, options, selected, callback)
     end)
     return button
 end
-
 local function createSlider(text, min, max, step, value, callback, formatter)
     local holder = Instance.new("Frame")
     holder.Size = UDim2.new(1, 0, 0, 64)
@@ -1100,7 +1107,7 @@ local function createSlider(text, min, max, step, value, callback, formatter)
     valueLabel.Position = UDim2.new(1, -2, 0, 0)
     valueLabel.Size = UDim2.fromOffset(70, 22)
     valueLabel.BackgroundTransparency = 1
-    valueLabel.TextColor3 = Color3.fromRGB(0, 210, 255)
+    valueLabel.TextColor3 = Color3.fromRGB(180, 110, 255)
     valueLabel.TextSize = 11
     valueLabel.Font = Enum.Font.GothamBold
     valueLabel.TextXAlignment = Enum.TextXAlignment.Right
@@ -1108,21 +1115,21 @@ local function createSlider(text, min, max, step, value, callback, formatter)
     local bar = Instance.new("Frame")
     bar.Position = UDim2.fromOffset(2, 31)
     bar.Size = UDim2.new(1, -4, 0, 7)
-    bar.BackgroundColor3 = Color3.fromRGB(30, 42, 60)
+    bar.BackgroundColor3 = Color3.fromRGB(38, 30, 50)
     bar.BorderSizePixel = 0
     bar.Active = true
     bar.Parent = holder
     Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
     local fill = Instance.new("Frame")
     fill.Size = UDim2.new(0, 0, 1, 0)
-    fill.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
+    fill.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
     fill.BorderSizePixel = 0
     fill.Parent = bar
     Instance.new("UICorner", fill).CornerRadius = UDim.new(1, 0)
     local knob = Instance.new("Frame")
     knob.AnchorPoint = Vector2.new(0.5, 0.5)
     knob.Size = UDim2.fromOffset(16, 16)
-    knob.BackgroundColor3 = Color3.fromRGB(180, 240, 255)
+    knob.BackgroundColor3 = Color3.fromRGB(220, 190, 255)
     knob.BorderSizePixel = 0
     knob.Parent = bar
     Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
@@ -1173,13 +1180,11 @@ local function createSlider(text, min, max, step, value, callback, formatter)
     setValue(value)
     return holder
 end
-
 local MainTab = createTabButton("Main", "crosshair")
 local VisualTab = createTabButton("ESP", "eye")
 local GarapalTab = createTabButton("Mics", "globe")
 local TeleportTab = createTabButton("Teleport", "user-round")
 local AboutTab = createTabButton("About", "info")
-
 local refreshAimModeVisibility
 local function updateAimButtonState(enabled)
     Config.TrackingEnabled = enabled
@@ -1193,7 +1198,7 @@ local function updateAimButtonState(enabled)
             TriggerbotFOVCircle.Visible = false
         end
         AimToggle.Text = "ON"
-        AimToggle.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
+        AimToggle.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
         notify("Aimbot ON")
     else
         AimToggle.Text = "AIM"
@@ -1205,7 +1210,6 @@ local function updateAimButtonState(enabled)
     if refreshTriggerbotButton then refreshTriggerbotButton() end
     if refreshAimModeVisibility then refreshAimModeVisibility() end
 end
-
 local SA2 = {
     targetPart = nil,
     targetPlayer = nil,
@@ -1216,14 +1220,12 @@ local SA2 = {
     fovCircle = nil,
     fovStroke = nil,
 }
-
 local function sa2Chance(chance)
     chance = tonumber(chance) or 100
     if chance >= 100 then return true end
     if chance <= 0 then return false end
     return math.random(1, 100) <= chance
 end
-
 local function sa2Character(target)
     if not target then return nil end
     if typeof(target) == "Instance" then
@@ -1235,7 +1237,6 @@ local function sa2Character(target)
     end
     return nil
 end
-
 local function sa2Alive(target)
     local char = sa2Character(target)
     if not char then return false end
@@ -1243,7 +1244,6 @@ local function sa2Alive(target)
     local root = char:FindFirstChild("HumanoidRootPart")
     return hum ~= nil and hum.Health > 0 and root ~= nil
 end
-
 local function sa2Part(target)
     local char = sa2Character(target)
     if not char then return nil end
@@ -1259,7 +1259,6 @@ local function sa2Part(target)
         or char:FindFirstChild("Head")
         or char:FindFirstChild("HumanoidRootPart")
 end
-
 local function sa2Enemy(player)
     if not player or player == LocalPlayer then return false end
     if Config.SA2_TeamTarget == "All" then
@@ -1276,7 +1275,6 @@ local function sa2Enemy(player)
     end
     return true
 end
-
 local function sa2Visible(character, part)
     if not Config.SA2_Wallcheck then return true end
     if not character or not part then return false end
@@ -1293,7 +1291,6 @@ local function sa2Visible(character, part)
     params.IgnoreWater = true
     return Workspace:Raycast(origin, direction, params) == nil
 end
-
 local function sa2PredictedPosition(part)
     if not part or not part.Parent then return nil end
     local prediction = tonumber(Config.SA2_Prediction) or 0
@@ -1307,7 +1304,6 @@ local function sa2PredictedPosition(part)
     end)
     return part.Position + (velocity * prediction)
 end
-
 local function sa2FindTarget()
     if not Config.SilentAimHK then
         return nil, nil
@@ -1326,7 +1322,6 @@ local function sa2FindTarget()
     local localCharacter = LocalPlayer.Character
     local localRoot = localCharacter and localCharacter:FindFirstChild("HumanoidRootPart")
     if not localRoot then return nil, nil end
-
     for _, target in ipairs(game:GetService("Players"):GetPlayers()) do
         if sa2Enemy(target) and sa2Alive(target) then
             local character = target.Character
@@ -1367,7 +1362,6 @@ local function sa2FindTarget()
     end
     return bestPlayer, bestPart
 end
-
 local function sa2UpdateTarget()
     if not Config.SilentAimHK then
         SA2.targetPlayer = nil
@@ -1378,7 +1372,6 @@ local function sa2UpdateTarget()
     SA2.targetPlayer = playerTarget
     SA2.targetPart = partTarget
 end
-
 local function sa2RewriteValue(value, keyHint, targetPos, hitPart)
     local kind = typeof(value)
     keyHint = type(keyHint) == "string" and string.lower(keyHint) or ""
@@ -1480,7 +1473,6 @@ local function sa2RewriteValue(value, keyHint, targetPos, hitPart)
     end
     return value
 end
-
 local function sa2RewriteArguments(arguments, targetPos, hitPart)
     local newArgs = table.clone(arguments)
     for i, value in ipairs(newArgs) do
@@ -1500,7 +1492,6 @@ local function sa2RewriteArguments(arguments, targetPos, hitPart)
     end
     return newArgs
 end
-
 local function sa2RemoteMatches(remote)
     if typeof(remote) ~= "Instance" then return false end
     if not (
@@ -1518,7 +1509,6 @@ local function sa2RemoteMatches(remote)
     end
     return false
 end
-
 local function sa2RestoreHooks()
     if SA2.namecallOld and hookmetamethod then
         pcall(function()
@@ -1535,7 +1525,6 @@ local function sa2RestoreHooks()
     SA2.hookActive = false
     SA2.mouseHookActive = false
 end
-
 local function sa2InstallHooks()
     if SA2.hookActive then return end
     if type(hookmetamethod) ~= "function"
@@ -1682,7 +1671,6 @@ local function sa2InstallHooks()
         SA2.mouseHookActive = true
     end
 end
-
 local function sa2SetEnabled(enabled)
     Config.SilentAimHK = enabled
     if enabled then
@@ -1694,7 +1682,6 @@ local function sa2SetEnabled(enabled)
         notify("Silent Aim OFF")
     end
 end
-
 local refreshMainUI
 local function createFeatureAimButton(name, text, position, getEnabled, setEnabled, isShown, setShown, isLocked, setLocked, onToggle)
     local button = Instance.new("TextButton")
@@ -1703,7 +1690,7 @@ local function createFeatureAimButton(name, text, position, getEnabled, setEnabl
     button.Position = position
     button.Size = UDim2.fromOffset(48, 48)
     button.BackgroundColor3 = getEnabled()
-        and Color3.fromRGB(0, 180, 255)
+        and Color3.fromRGB(125, 65, 205)
         or Color3.fromRGB(235, 65, 65)
     button.Text = text .. "\n" .. (getEnabled() and "ON" or "OFF")
     button.TextColor3 = Color3.new(1, 1, 1)
@@ -1713,7 +1700,6 @@ local function createFeatureAimButton(name, text, position, getEnabled, setEnabl
     button.Visible = isShown()
     button.Parent = ScreenGui
     Instance.new("UICorner", button).CornerRadius = UDim.new(0, 12)
-
     local dragging = false
     local dragStart
     local startPosition
@@ -1735,7 +1721,6 @@ local function createFeatureAimButton(name, text, position, getEnabled, setEnabl
             end)
         end
     end)
-
     connect(UserInputService.InputChanged, function(input)
         if not isLocked() and dragging and (
             input.UserInputType == Enum.UserInputType.MouseMovement
@@ -1754,20 +1739,17 @@ local function createFeatureAimButton(name, text, position, getEnabled, setEnabl
             button.Position = button.Position:Lerp(targetPosition, 0.32)
         end
     end)
-
     local function applyVisual(enabled)
         enabled = enabled == true
         button.Visible = isShown() == true
         button.Text = text .. "\n" .. (enabled and "ON" or "OFF")
         button.BackgroundColor3 = enabled
-            and Color3.fromRGB(0, 180, 255)
+            and Color3.fromRGB(125, 65, 205)
             or Color3.fromRGB(235, 65, 65)
     end
-
     local function refresh()
         applyVisual(getEnabled() == true)
     end
-
     connect(button.MouseButton1Click, function()
         if moved then
             moved = false
@@ -1787,7 +1769,6 @@ local function createFeatureAimButton(name, text, position, getEnabled, setEnabl
     end)
     return button, refresh
 end
-
 local SilentAimToggle, refreshSilentAimButton = createFeatureAimButton(
     "SilentAimToggle",
     "SILENT",
@@ -1816,7 +1797,6 @@ local SilentAimToggle, refreshSilentAimButton = createFeatureAimButton(
         end)
     end
 )
-
 local TriggerbotToggle, refreshTriggerbotButton = createFeatureAimButton(
     "TriggerbotToggle",
     "TRIGGER",
@@ -1847,7 +1827,6 @@ local TriggerbotToggle, refreshTriggerbotButton = createFeatureAimButton(
         end)
     end
 )
-
 refreshAimModeVisibility = function()
     AimToggle.Visible = Config.ShowAimButton
     if SilentAimToggle then
@@ -1858,7 +1837,7 @@ refreshAimModeVisibility = function()
     end
     AimToggle.Text = Config.TrackingEnabled and "ON" or "AIM"
     if Config.TrackingEnabled == true then
-        AimToggle.BackgroundColor3 = Color3.fromRGB(0, 180, 255) 
+        AimToggle.BackgroundColor3 = Color3.fromRGB(125, 65, 205) 
     else
         AimToggle.BackgroundColor3 = Color3.fromRGB(235, 65, 65) 
     end
@@ -1866,14 +1845,12 @@ refreshAimModeVisibility = function()
     if refreshTriggerbotButton then refreshTriggerbotButton() end
 end
 refreshAimModeVisibility()
-
 connect(RunService.Heartbeat, function()
     if not Config.SilentAimHK then
         return
     end
     sa2UpdateTarget()
 end)
-
 do
     local gui = Instance.new("ScreenGui")
     gui.Name = "JAJAturokSilentAimFOV"
@@ -1913,14 +1890,12 @@ do
         end
     end)
 end
-
 connect(UserInputService.InputBegan, function(input, processed)
     if processed then return end
     if input.KeyCode == Config.SA2_Key then
         sa2SetEnabled(not Config.SilentAimHK)
     end
 end)
-
 if Window and type(Window.OnDestroy) == "function" then
     pcall(function()
         Window:OnDestroy(function()
@@ -1928,11 +1903,10 @@ if Window and type(Window.OnDestroy) == "function" then
         end)
     end)
 end
-
 local function createWarningMessage()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(1, 0, 0, 58)
-    frame.BackgroundColor3 = Color3.fromRGB(15, 40, 60)
+    frame.BackgroundColor3 = Color3.fromRGB(58, 35, 82)
     frame.BorderSizePixel = 0
     frame.Parent = Content
     Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)
@@ -1941,7 +1915,7 @@ local function createWarningMessage()
     title.Size = UDim2.new(1, -24, 0, 17)
     title.BackgroundTransparency = 1
     title.Text = "Warning"
-    title.TextColor3 = Color3.fromRGB(0, 210, 255)
+    title.TextColor3 = Color3.fromRGB(225, 200, 255)
     title.TextSize = 11
     title.Font = Enum.Font.GothamBold
     title.TextXAlignment = Enum.TextXAlignment.Left
@@ -1951,7 +1925,7 @@ local function createWarningMessage()
     message.Size = UDim2.new(1, -24, 0, 28)
     message.BackgroundTransparency = 1
     message.Text = "Use at your own risk • Don't use your main account if you plan to use this cheat."
-    message.TextColor3 = Color3.fromRGB(215, 230, 245)
+    message.TextColor3 = Color3.fromRGB(235, 230, 245)
     message.TextSize = 9
     message.Font = Enum.Font.Gotham
     message.TextWrapped = true
@@ -1960,7 +1934,6 @@ local function createWarningMessage()
     message.Parent = frame
     return frame
 end
-
 local function buildMain()
     createContentLayout()
     createSection("Silent Aim & Aimbot & Triggerbot")
@@ -2000,7 +1973,7 @@ local function buildMain()
             holder.Parent = Content
             local showButton = Instance.new("TextButton")
             showButton.Size = UDim2.new(1, 0, 0, 42)
-            showButton.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+            showButton.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
             showButton.BorderSizePixel = 0
             showButton.AutoButtonColor = false
             showButton.Text = ""
@@ -2009,7 +1982,7 @@ local function buildMain()
             local check = Instance.new("Frame")
             check.Position = UDim2.fromOffset(10, 12)
             check.Size = UDim2.fromOffset(18, 18)
-            check.BackgroundColor3 = Config.ShowSilentAimButton and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+            check.BackgroundColor3 = Config.ShowSilentAimButton and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
             check.BorderSizePixel = 0
             check.Parent = showButton
             Instance.new("UICorner", check).CornerRadius = UDim.new(0, 5)
@@ -2035,11 +2008,11 @@ local function buildMain()
             arrowButton.AnchorPoint = Vector2.new(1, 0.5)
             arrowButton.Position = UDim2.new(1, -8, 0.5, 0)
             arrowButton.Size = UDim2.fromOffset(34, 32)
-            arrowButton.BackgroundColor3 = Color3.fromRGB(20, 36, 52)
+            arrowButton.BackgroundColor3 = Color3.fromRGB(35, 27, 48)
             arrowButton.BorderSizePixel = 0
             arrowButton.AutoButtonColor = false
             arrowButton.Text = "›"
-            arrowButton.TextColor3 = Color3.fromRGB(0, 210, 255)
+            arrowButton.TextColor3 = Color3.fromRGB(205, 175, 245)
             arrowButton.TextSize = 21
             arrowButton.Font = Enum.Font.GothamBold
             arrowButton.ZIndex = 3
@@ -2049,7 +2022,7 @@ local function buildMain()
             local lockRow = Instance.new("TextButton")
             lockRow.Position = UDim2.fromOffset(0, 47)
             lockRow.Size = UDim2.new(1, 0, 0, 38)
-            lockRow.BackgroundColor3 = Color3.fromRGB(18, 28, 44)
+            lockRow.BackgroundColor3 = Color3.fromRGB(27, 23, 38)
             lockRow.BorderSizePixel = 0
             lockRow.AutoButtonColor = false
             lockRow.Text = ""
@@ -2069,7 +2042,7 @@ local function buildMain()
             local lockCheck = Instance.new("Frame")
             lockCheck.Position = UDim2.fromOffset(10, 10)
             lockCheck.Size = UDim2.fromOffset(18, 18)
-            lockCheck.BackgroundColor3 = Config.SilentAimButtonLocked and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+            lockCheck.BackgroundColor3 = Config.SilentAimButtonLocked and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
             lockCheck.BorderSizePixel = 0
             lockCheck.Parent = lockRow
             Instance.new("UICorner", lockCheck).CornerRadius = UDim.new(0, 5)
@@ -2082,13 +2055,13 @@ local function buildMain()
             lockCheckText.TextSize = 12
             lockCheckText.Parent = lockCheck
             local function refreshSilentControls()
-                check.BackgroundColor3 = Config.ShowSilentAimButton and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+                check.BackgroundColor3 = Config.ShowSilentAimButton and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
                 checkText.Text = Config.ShowSilentAimButton and "✓" or ""
                 SilentAimToggle.Visible = Config.ShowSilentAimButton
                 lockRow.Visible = Config.ShowSilentAimButton and lockOpen
                 holder.Size = UDim2.new(1, 0, 0, lockRow.Visible and 89 or 42)
                 arrowButton.Text = lockOpen and "⌃" or "›"
-                lockCheck.BackgroundColor3 = Config.SilentAimButtonLocked and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+                lockCheck.BackgroundColor3 = Config.SilentAimButtonLocked and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
                 lockCheckText.Text = Config.SilentAimButtonLocked and "✓" or ""
                 refreshSilentAimButton()
             end
@@ -2111,7 +2084,7 @@ local function buildMain()
             refreshSilentControls()
         end
     end
-    if not Config.SilentAimHK and not Config.Triggerbot then
+    if not Config.SilentAimHK and not Config.TrackingEnabled then
         createSimpleToggle("Aimbot", Config.TrackingEnabled, function(v)
             if v then
                 if Config.SilentAimHK then
@@ -2141,7 +2114,7 @@ local function buildMain()
             holder.Parent = Content
             local showButton = Instance.new("TextButton")
             showButton.Size = UDim2.new(1, 0, 0, 42)
-            showButton.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+            showButton.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
             showButton.BorderSizePixel = 0
             showButton.AutoButtonColor = false
             showButton.Text = ""
@@ -2150,7 +2123,7 @@ local function buildMain()
             local check = Instance.new("Frame")
             check.Position = UDim2.fromOffset(10, 12)
             check.Size = UDim2.fromOffset(18, 18)
-            check.BackgroundColor3 = Config.ShowAimButton and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+            check.BackgroundColor3 = Config.ShowAimButton and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
             check.BorderSizePixel = 0
             check.Parent = showButton
             Instance.new("UICorner", check).CornerRadius = UDim.new(0, 5)
@@ -2176,11 +2149,11 @@ local function buildMain()
             arrowButton.AnchorPoint = Vector2.new(1, 0.5)
             arrowButton.Position = UDim2.new(1, -8, 0.5, 0)
             arrowButton.Size = UDim2.fromOffset(34, 32)
-            arrowButton.BackgroundColor3 = Color3.fromRGB(20, 36, 52)
+            arrowButton.BackgroundColor3 = Color3.fromRGB(35, 27, 48)
             arrowButton.BorderSizePixel = 0
             arrowButton.AutoButtonColor = false
             arrowButton.Text = "›"
-            arrowButton.TextColor3 = Color3.fromRGB(0, 210, 255)
+            arrowButton.TextColor3 = Color3.fromRGB(205, 175, 245)
             arrowButton.TextSize = 21
             arrowButton.Font = Enum.Font.GothamBold
             arrowButton.Parent = showButton
@@ -2188,7 +2161,7 @@ local function buildMain()
             local lockRow = Instance.new("TextButton")
             lockRow.Position = UDim2.fromOffset(0, 47)
             lockRow.Size = UDim2.new(1, 0, 0, 38)
-            lockRow.BackgroundColor3 = Color3.fromRGB(18, 28, 44)
+            lockRow.BackgroundColor3 = Color3.fromRGB(27, 23, 38)
             lockRow.BorderSizePixel = 0
             lockRow.AutoButtonColor = false
             lockRow.Text = ""
@@ -2208,7 +2181,7 @@ local function buildMain()
             local lockCheck = Instance.new("Frame")
             lockCheck.Position = UDim2.fromOffset(10, 10)
             lockCheck.Size = UDim2.fromOffset(18, 18)
-            lockCheck.BackgroundColor3 = aimButtonLocked and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+            lockCheck.BackgroundColor3 = aimButtonLocked and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
             lockCheck.BorderSizePixel = 0
             lockCheck.Parent = lockRow
             Instance.new("UICorner", lockCheck).CornerRadius = UDim.new(0, 5)
@@ -2221,13 +2194,13 @@ local function buildMain()
             lockCheckText.TextSize = 12
             lockCheckText.Parent = lockCheck
             local function refreshShowAim()
-                check.BackgroundColor3 = Config.ShowAimButton and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+                check.BackgroundColor3 = Config.ShowAimButton and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
                 checkText.Text = Config.ShowAimButton and "✓" or ""
                 AimToggle.Visible = Config.ShowAimButton
                 lockRow.Visible = Config.ShowAimButton and lockPanelOpen
                 holder.Size = UDim2.new(1, 0, 0, lockRow.Visible and 89 or 42)
                 arrowButton.Text = lockPanelOpen and "⌃" or "›"
-                lockCheck.BackgroundColor3 = aimButtonLocked and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+                lockCheck.BackgroundColor3 = aimButtonLocked and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
                 lockCheckText.Text = aimButtonLocked and "✓" or ""
             end
             connect(showButton.MouseButton1Click, function()
@@ -2314,7 +2287,7 @@ local function buildMain()
             holder.Parent = Content
             local showButton = Instance.new("TextButton")
             showButton.Size = UDim2.new(1, 0, 0, 42)
-            showButton.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+            showButton.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
             showButton.BorderSizePixel = 0
             showButton.AutoButtonColor = false
             showButton.Text = ""
@@ -2323,7 +2296,7 @@ local function buildMain()
             local check = Instance.new("Frame")
             check.Position = UDim2.fromOffset(10, 12)
             check.Size = UDim2.fromOffset(18, 18)
-            check.BackgroundColor3 = Config.ShowTriggerbotButton and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+            check.BackgroundColor3 = Config.ShowTriggerbotButton and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
             check.BorderSizePixel = 0
             check.Parent = showButton
             Instance.new("UICorner", check).CornerRadius = UDim.new(0, 5)
@@ -2349,11 +2322,11 @@ local function buildMain()
             arrowButton.AnchorPoint = Vector2.new(1, 0.5)
             arrowButton.Position = UDim2.new(1, -8, 0.5, 0)
             arrowButton.Size = UDim2.fromOffset(34, 32)
-            arrowButton.BackgroundColor3 = Color3.fromRGB(20, 36, 52)
+            arrowButton.BackgroundColor3 = Color3.fromRGB(35, 27, 48)
             arrowButton.BorderSizePixel = 0
             arrowButton.AutoButtonColor = false
             arrowButton.Text = "›"
-            arrowButton.TextColor3 = Color3.fromRGB(0, 210, 255)
+            arrowButton.TextColor3 = Color3.fromRGB(205, 175, 245)
             arrowButton.TextSize = 21
             arrowButton.Font = Enum.Font.GothamBold
             arrowButton.ZIndex = 3
@@ -2363,7 +2336,7 @@ local function buildMain()
             local lockRow = Instance.new("TextButton")
             lockRow.Position = UDim2.fromOffset(0, 47)
             lockRow.Size = UDim2.new(1, 0, 0, 38)
-            lockRow.BackgroundColor3 = Color3.fromRGB(18, 28, 44)
+            lockRow.BackgroundColor3 = Color3.fromRGB(27, 23, 38)
             lockRow.BorderSizePixel = 0
             lockRow.AutoButtonColor = false
             lockRow.Text = ""
@@ -2383,7 +2356,7 @@ local function buildMain()
             local lockCheck = Instance.new("Frame")
             lockCheck.Position = UDim2.fromOffset(10, 10)
             lockCheck.Size = UDim2.fromOffset(18, 18)
-            lockCheck.BackgroundColor3 = Config.TriggerbotButtonLocked and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+            lockCheck.BackgroundColor3 = Config.TriggerbotButtonLocked and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
             lockCheck.BorderSizePixel = 0
             lockCheck.Parent = lockRow
             Instance.new("UICorner", lockCheck).CornerRadius = UDim.new(0, 5)
@@ -2396,13 +2369,13 @@ local function buildMain()
             lockCheckText.TextSize = 12
             lockCheckText.Parent = lockCheck
             local function refreshTriggerControls()
-                check.BackgroundColor3 = Config.ShowTriggerbotButton and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+                check.BackgroundColor3 = Config.ShowTriggerbotButton and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
                 checkText.Text = Config.ShowTriggerbotButton and "✓" or ""
                 TriggerbotToggle.Visible = Config.ShowTriggerbotButton
                 lockRow.Visible = Config.ShowTriggerbotButton and lockOpen
                 holder.Size = UDim2.new(1, 0, 0, lockRow.Visible and 89 or 42)
                 arrowButton.Text = lockOpen and "⌃" or "›"
-                lockCheck.BackgroundColor3 = Config.TriggerbotButtonLocked and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+                lockCheck.BackgroundColor3 = Config.TriggerbotButtonLocked and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
                 lockCheckText.Text = Config.TriggerbotButtonLocked and "✓" or ""
                 refreshTriggerbotButton()
             end
@@ -2429,13 +2402,11 @@ local function buildMain()
         createWarningMessage()
     end
 end
-
 refreshMainUI = function()
     if CurrentTab == "Main" then
         selectTab("Main", buildMain)
     end
 end
-
 local function buildVisuals()
     createContentLayout()
     createSection("Visual Overlay")
@@ -2444,7 +2415,6 @@ local function buildVisuals()
     createToggle("Name Tags", Config.NameTags, function(v) Config.NameTags = v end)
     createToggle("Distance", Config.Distance, function(v) Config.Distance = v end)
 end
-
 local function buildGarapal()
     createContentLayout()
     createSection("Movement")
@@ -2526,7 +2496,6 @@ local function buildGarapal()
         end)
     end
 end
-
 connect(LocalPlayer.CharacterAdded, function(char)
     local humanoid = char:WaitForChild("Humanoid", 5)
     if not humanoid or not KeyVerified then return end
@@ -2535,7 +2504,6 @@ connect(LocalPlayer.CharacterAdded, function(char)
         humanoid.WalkSpeed = Config.WalkSpeedValue
     end
 end)
-
 connect(RunService.Heartbeat, function()
     if not KeyVerified or not Config.SpeedHack then return end
     local char = LocalPlayer.Character
@@ -2544,7 +2512,6 @@ connect(RunService.Heartbeat, function()
         humanoid.WalkSpeed = Config.WalkSpeedValue
     end
 end)
-
 RunService.Stepped:Connect(function()
     if not KeyVerified then return end
     if Config.NoClip then
@@ -2558,7 +2525,6 @@ RunService.Stepped:Connect(function()
         end
     end
 end)
-
 UserInputService.JumpRequest:Connect(function()
     if not KeyVerified then return end
     if Config.InfiniteJump then
@@ -2571,14 +2537,12 @@ UserInputService.JumpRequest:Connect(function()
         end
     end
 end)
-
 local originalPartSizes = {}
 local function rememberPartSize(part)
     if part and originalPartSizes[part] == nil then
         originalPartSizes[part] = part.Size
     end
 end
-
 local function restorePartSize(part)
     local original = part and originalPartSizes[part]
     if part and part.Parent and original then
@@ -2588,7 +2552,6 @@ local function restorePartSize(part)
         originalPartSizes[part] = nil
     end
 end
-
 updateRealHitbox = function()
     if not KeyVerified then return end
     for _, player in ipairs(Players:GetPlayers()) do
@@ -2639,24 +2602,20 @@ updateRealHitbox = function()
         end
     end
 end
-
 connect(LocalPlayer.CharacterAdded, function()
     task.wait(0.5)
     updateRealHitbox()
 end)
-
 connect(Players.PlayerAdded, function(player)
     connect(player.CharacterAdded, function()
         task.wait(0.5)
         updateRealHitbox()
     end)
 end)
-
 local PCFlyKeys = {
     W = false, A = false, S = false, D = false,
     Space = false, LeftControl = false
 }
-
 connect(UserInputService.InputBegan, function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
@@ -2675,7 +2634,6 @@ connect(UserInputService.InputBegan, function(input, gameProcessed)
         PCFlyKeys.LeftControl = true
     end
 end)
-
 connect(UserInputService.InputEnded, function(input)
     if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
     local key = input.KeyCode
@@ -2693,7 +2651,6 @@ connect(UserInputService.InputEnded, function(input)
         PCFlyKeys.LeftControl = false
     end
 end)
-
 connect(RunService.RenderStepped, function(dt)
     if not KeyVerified then return end
     local char = LocalPlayer.Character
@@ -2745,7 +2702,6 @@ connect(RunService.RenderStepped, function(dt)
         end
     end
 end)
-
 local function getValidPlayers()
     local result = {}
     for _, player in ipairs(Players:GetPlayers()) do
@@ -2761,7 +2717,6 @@ local function getValidPlayers()
     end)
     return result
 end
-
 local function teleportToPlayer(player)
     if not Config.TeleportEnabled then
         notify("Enable teleport first")
@@ -2781,11 +2736,10 @@ local function teleportToPlayer(player)
     localRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 3, 0)
     notify("Teleported to " .. player.DisplayName)
 end
-
 local function createTeleportPlayerButton(player)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(1, 0, 0, 42)
-    button.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+    button.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
     button.BorderSizePixel = 0
     button.AutoButtonColor = false
     button.Text = ""
@@ -2815,10 +2769,10 @@ local function createTeleportPlayerButton(player)
     action.AnchorPoint = Vector2.new(1, 0.5)
     action.Position = UDim2.new(1, -10, 0.5, 0)
     action.Size = UDim2.fromOffset(48, 24)
-    action.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
+    action.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
     action.BackgroundTransparency = 0
     action.Text = "TP"
-    action.TextColor3 = Color3.fromRGB(10, 15, 25)
+    action.TextColor3 = Color3.new(1, 1, 1)
     action.TextSize = 10
     action.Font = Enum.Font.GothamBold
     action.Parent = button
@@ -2828,7 +2782,6 @@ local function createTeleportPlayerButton(player)
     end)
     return button
 end
-
 local CameraTPButton = nil
 local CameraTPYaw = 0
 local CameraTPPitch = 0
@@ -2836,7 +2789,6 @@ local CameraTPTouch = nil
 local CameraTPTouchLast = nil
 local CameraTPMouseLook = false
 local CameraTPMouseLast = nil
-
 local function getLocalParts()
     local character = LocalPlayer.Character
     if not character then return nil, nil, nil end
@@ -2844,13 +2796,11 @@ local function getLocalParts()
     local root = character:FindFirstChild("HumanoidRootPart")
     return character, humanoid, root
 end
-
 local function getCameraTPRotation(camera)
     local x, y, _ = camera.CFrame:ToOrientation()
     CameraTPPitch = math.clamp(x, math.rad(-88), math.rad(88))
     CameraTPYaw = y
 end
-
 local function updateCameraTPButton()
     if not CameraTPButton then return end
     CameraTPButton.Visible = Config.ViewCameraTP
@@ -2860,19 +2810,18 @@ local function updateCameraTPButton()
         CameraTPButton.TextColor3 = Color3.fromRGB(255, 255, 255)
         if TPHereButton then
             TPHereButton.Visible = Config.ViewCameraTP
-            TPHereButton.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
+            TPHereButton.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
             TPHereButton.Text = "TP HERE"
         end
     else
         CameraTPButton.Text = "TP CAM"
-        CameraTPButton.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
-        CameraTPButton.TextColor3 = Color3.fromRGB(10, 15, 25)
+        CameraTPButton.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
+        CameraTPButton.TextColor3 = Color3.fromRGB(255, 255, 255)
         if TPHereButton then
             TPHereButton.Visible = false
         end
     end
 end
-
 local function stopCameraTP(restoreCamera)
     local _, humanoid, root = getLocalParts()
     local camera = Workspace.CurrentCamera
@@ -2903,7 +2852,6 @@ local function stopCameraTP(restoreCamera)
     Config.CameraTPOriginalCFrame = nil
     updateCameraTPButton()
 end
-
 local function startCameraTP()
     if not Config.ViewCameraTP then
         notify("Enable View Camera TP first")
@@ -2964,7 +2912,6 @@ local function startCameraTP()
     notify("Camera TP active - joystick moves camera, swipe screen to look")
     updateCameraTPButton()
 end
-
 connect(UserInputService.InputBegan, function(input)
     if not Config.CameraTPActive then return end
     if input.UserInputType == Enum.UserInputType.Touch then
@@ -2980,7 +2927,6 @@ connect(UserInputService.InputBegan, function(input)
         CameraTPMouseLast = input.Position
     end
 end)
-
 connect(UserInputService.InputChanged, function(input)
     if not Config.CameraTPActive then return end
     if input.UserInputType == Enum.UserInputType.MouseMovement and CameraTPMouseLook then
@@ -2997,7 +2943,6 @@ connect(UserInputService.InputChanged, function(input)
         CameraTPMouseLast = current
     end
 end)
-
 connect(UserInputService.TouchMoved, function(input, _gameProcessed)
     if not Config.CameraTPActive or input ~= CameraTPTouch then return end
     local current = input.Position
@@ -3012,7 +2957,6 @@ connect(UserInputService.TouchMoved, function(input, _gameProcessed)
     end
     CameraTPTouchLast = current
 end)
-
 connect(UserInputService.InputEnded, function(input)
     if input == CameraTPTouch then
         CameraTPTouch = nil
@@ -3022,7 +2966,6 @@ connect(UserInputService.InputEnded, function(input)
         CameraTPMouseLast = nil
     end
 end)
-
 connect(RunService.RenderStepped, function(dt)
     if not KeyVerified or not Config.CameraTPActive then return end
     local _, humanoid, root = getLocalParts()
@@ -3063,7 +3006,6 @@ connect(RunService.RenderStepped, function(dt)
         end
     end
 end)
-
 connect(LocalPlayer.CharacterAdded, function()
     if Config.CameraTPActive then
         task.defer(function()
@@ -3071,7 +3013,6 @@ connect(LocalPlayer.CharacterAdded, function()
         end)
     end
 end)
-
 local function createCameraTPFloatingButton()
     if CameraTPButton and CameraTPButton.Parent then return end
     CameraTPButton = Instance.new("TextButton")
@@ -3079,23 +3020,21 @@ local function createCameraTPFloatingButton()
     CameraTPButton.AnchorPoint = Vector2.new(0, 1)
     CameraTPButton.Position = UDim2.new(0, 135, 1, -15)
     CameraTPButton.Size = UDim2.fromOffset(105, 48)
-    CameraTPButton.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
+    CameraTPButton.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
     CameraTPButton.BorderSizePixel = 0
     CameraTPButton.AutoButtonColor = false
     CameraTPButton.Text = "TP CAM"
-    CameraTPButton.TextColor3 = Color3.fromRGB(10, 15, 25)
+    CameraTPButton.TextColor3 = Color3.new(1, 1, 1)
     CameraTPButton.TextSize = 10
     CameraTPButton.Font = Enum.Font.GothamBold
     CameraTPButton.Visible = Config.ViewCameraTP
     CameraTPButton.ZIndex = 100
     CameraTPButton.Parent = ScreenGui
     Instance.new("UICorner", CameraTPButton).CornerRadius = UDim.new(0, 12)
-
     local cameraTPDragging = false
     local cameraTPDragStart
     local cameraTPStartPosition
     local cameraTPMoved = false
-
     connect(CameraTPButton.InputBegan, function(input)
         if Config.CameraTPButtonLocked then
             return
@@ -3115,7 +3054,6 @@ local function createCameraTPFloatingButton()
             end)
         end
     end)
-
     connect(UserInputService.InputChanged, function(input)
         if cameraTPDragging
             and (input.UserInputType == Enum.UserInputType.MouseMovement
@@ -3133,7 +3071,6 @@ local function createCameraTPFloatingButton()
             CameraTPButton.Position = CameraTPButton.Position:Lerp(targetPosition, 0.32)
         end
     end)
-
     connect(CameraTPButton.MouseButton1Click, function()
         if cameraTPMoved then
             cameraTPMoved = false
@@ -3143,7 +3080,6 @@ local function createCameraTPFloatingButton()
     end)
 end
 createCameraTPFloatingButton()
-
 local updateSpectateStopButton
 local function stopSpectating(disableFeature)
     local camera = Workspace.CurrentCamera
@@ -3164,7 +3100,6 @@ local function stopSpectating(disableFeature)
         updateSpectateStopButton()
     end
 end
-
 local function spectatePlayer(player)
     if not Config.SpectateEnabled then
         notify("Enable spectate first")
@@ -3193,12 +3128,11 @@ local function spectatePlayer(player)
     end
     notify("Spectating " .. player.DisplayName)
 end
-
 local function createSpectatePlayerButton(player, parent)
     parent = parent or Content
     local holder = Instance.new("Frame")
     holder.Size = UDim2.new(1, 0, 0, 42)
-    holder.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+    holder.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
     holder.BorderSizePixel = 0
     holder.Parent = parent
     Instance.new("UICorner", holder).CornerRadius = UDim.new(0, 8)
@@ -3226,11 +3160,11 @@ local function createSpectatePlayerButton(player, parent)
     action.AnchorPoint = Vector2.new(1, 0.5)
     action.Position = UDim2.new(1, -10, 0.5, 0)
     action.Size = UDim2.fromOffset(76, 26)
-    action.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
+    action.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
     action.BorderSizePixel = 0
     action.AutoButtonColor = false
     action.Text = "SPECTATE"
-    action.TextColor3 = Color3.fromRGB(10, 15, 25)
+    action.TextColor3 = Color3.new(1, 1, 1)
     action.TextSize = 8
     action.Font = Enum.Font.GothamBold
     action.Parent = holder
@@ -3240,7 +3174,6 @@ local function createSpectatePlayerButton(player, parent)
     end)
     return holder
 end
-
 connect(RunService.RenderStepped, function()
     if not KeyVerified or not Config.SpectateActive then return end
     local target = Config.SpectateTarget
@@ -3255,14 +3188,12 @@ connect(RunService.RenderStepped, function()
         camera.CameraSubject = humanoid
     end
 end)
-
 connect(Players.PlayerRemoving, function(player)
     if Config.SpectateTarget == player then
         stopSpectating()
         notify("Spectate target left the server")
     end
 end)
-
 connect(LocalPlayer.CharacterAdded, function()
     if not Config.SpectateActive then
         task.wait(0.1)
@@ -3275,7 +3206,6 @@ connect(LocalPlayer.CharacterAdded, function()
         end
     end
 end)
-
 local function buildTeleport()
     createContentLayout()
     createSection("Camera TP")
@@ -3286,7 +3216,7 @@ local function buildTeleport()
         holder.Parent = Content
         local viewButton = Instance.new("TextButton")
         viewButton.Size = UDim2.new(1, 0, 0, 42)
-        viewButton.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+        viewButton.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
         viewButton.BorderSizePixel = 0
         viewButton.AutoButtonColor = false
         viewButton.Text = ""
@@ -3295,7 +3225,7 @@ local function buildTeleport()
         local check = Instance.new("Frame")
         check.Position = UDim2.fromOffset(10, 12)
         check.Size = UDim2.fromOffset(18, 18)
-        check.BackgroundColor3 = Config.ViewCameraTP and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+        check.BackgroundColor3 = Config.ViewCameraTP and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
         check.BorderSizePixel = 0
         check.Parent = viewButton
         Instance.new("UICorner", check).CornerRadius = UDim.new(0, 5)
@@ -3321,11 +3251,11 @@ local function buildTeleport()
         arrowButton.AnchorPoint = Vector2.new(1, 0.5)
         arrowButton.Position = UDim2.new(1, -8, 0.5, 0)
         arrowButton.Size = UDim2.fromOffset(34, 32)
-        arrowButton.BackgroundColor3 = Color3.fromRGB(20, 36, 52)
+        arrowButton.BackgroundColor3 = Color3.fromRGB(35, 27, 48)
         arrowButton.BorderSizePixel = 0
         arrowButton.AutoButtonColor = false
         arrowButton.Text = "›"
-        arrowButton.TextColor3 = Color3.fromRGB(0, 210, 255)
+        arrowButton.TextColor3 = Color3.fromRGB(205, 175, 245)
         arrowButton.TextSize = 21
         arrowButton.Font = Enum.Font.GothamBold
         arrowButton.Parent = viewButton
@@ -3333,7 +3263,7 @@ local function buildTeleport()
         local lockRow = Instance.new("TextButton")
         lockRow.Position = UDim2.fromOffset(0, 47)
         lockRow.Size = UDim2.new(1, 0, 0, 38)
-        lockRow.BackgroundColor3 = Color3.fromRGB(18, 28, 44)
+        lockRow.BackgroundColor3 = Color3.fromRGB(27, 23, 38)
         lockRow.BorderSizePixel = 0
         lockRow.AutoButtonColor = false
         lockRow.Text = ""
@@ -3343,7 +3273,7 @@ local function buildTeleport()
         local lockCheck = Instance.new("Frame")
         lockCheck.Position = UDim2.fromOffset(10, 10)
         lockCheck.Size = UDim2.fromOffset(18, 18)
-        lockCheck.BackgroundColor3 = Config.CameraTPButtonLocked and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+        lockCheck.BackgroundColor3 = Config.CameraTPButtonLocked and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
         lockCheck.BorderSizePixel = 0
         lockCheck.Parent = lockRow
         Instance.new("UICorner", lockCheck).CornerRadius = UDim.new(0, 5)
@@ -3367,12 +3297,12 @@ local function buildTeleport()
         lockLabel.Parent = lockRow
         local panelOpen = false
         local function refreshCameraTPPanel()
-            check.BackgroundColor3 = Config.ViewCameraTP and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+            check.BackgroundColor3 = Config.ViewCameraTP and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
             checkText.Text = Config.ViewCameraTP and "✓" or ""
             lockRow.Visible = Config.ViewCameraTP and panelOpen
             holder.Size = UDim2.new(1, 0, 0, lockRow.Visible and 89 or 42)
             arrowButton.Text = panelOpen and "⌃" or "›"
-            lockCheck.BackgroundColor3 = Config.CameraTPButtonLocked and Color3.fromRGB(0, 180, 255) or Color3.fromRGB(38, 48, 65)
+            lockCheck.BackgroundColor3 = Config.CameraTPButtonLocked and Color3.fromRGB(125, 65, 205) or Color3.fromRGB(38, 35, 50)
             lockCheckText.Text = Config.CameraTPButtonLocked and "✓" or ""
         end
         connect(viewButton.MouseButton1Click, function()
@@ -3432,11 +3362,11 @@ local function buildTeleport()
         teleportRefreshRow.Parent = Content
         local teleportRefreshButton = Instance.new("TextButton")
         teleportRefreshButton.Size = UDim2.new(1, 0, 1, 0)
-        teleportRefreshButton.BackgroundColor3 = Color3.fromRGB(20, 36, 52)
+        teleportRefreshButton.BackgroundColor3 = Color3.fromRGB(35, 29, 48)
         teleportRefreshButton.BorderSizePixel = 0
         teleportRefreshButton.AutoButtonColor = false
         teleportRefreshButton.Text = "↺  Refresh Players"
-        teleportRefreshButton.TextColor3 = Color3.fromRGB(0, 210, 255)
+        teleportRefreshButton.TextColor3 = Color3.fromRGB(220, 205, 245)
         teleportRefreshButton.TextSize = 11
         teleportRefreshButton.Font = Enum.Font.GothamBold
         teleportRefreshButton.Parent = teleportRefreshRow
@@ -3463,7 +3393,7 @@ local function buildTeleport()
             if #currentPlayers == 0 then
                 local empty = Instance.new("TextLabel")
                 empty.Size = UDim2.new(1, 0, 0, 42)
-                empty.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+                empty.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
                 empty.BorderSizePixel = 0
                 empty.Text = "No players available to teleport"
                 empty.TextColor3 = Color3.fromRGB(140, 150, 175)
@@ -3510,11 +3440,11 @@ local function buildTeleport()
         createSection("Spectate Players")
         spectateStopButton = Instance.new("TextButton")
         spectateStopButton.Size = UDim2.new(1, 0, 0, 40)
-        spectateStopButton.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
+        spectateStopButton.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
         spectateStopButton.BorderSizePixel = 0
         spectateStopButton.AutoButtonColor = false
         spectateStopButton.Text = "STOP SPECTATING"
-        spectateStopButton.TextColor3 = Color3.fromRGB(10, 15, 25)
+        spectateStopButton.TextColor3 = Color3.new(1, 1, 1)
         spectateStopButton.TextSize = 10
         spectateStopButton.Font = Enum.Font.GothamBold
         spectateStopButton.Visible = Config.SpectateActive
@@ -3537,11 +3467,11 @@ local function buildTeleport()
         spectateRefreshRow.Parent = Content
         local refreshButton = Instance.new("TextButton")
         refreshButton.Size = UDim2.new(1, 0, 1, 0)
-        refreshButton.BackgroundColor3 = Color3.fromRGB(20, 36, 52)
+        refreshButton.BackgroundColor3 = Color3.fromRGB(35, 29, 48)
         refreshButton.BorderSizePixel = 0
         refreshButton.AutoButtonColor = false
         refreshButton.Text = "↺  Refresh Players"
-        refreshButton.TextColor3 = Color3.fromRGB(0, 210, 255)
+        refreshButton.TextColor3 = Color3.fromRGB(220, 205, 245)
         refreshButton.TextSize = 11
         refreshButton.Font = Enum.Font.GothamBold
         refreshButton.Parent = spectateRefreshRow
@@ -3568,7 +3498,7 @@ local function buildTeleport()
             if #currentPlayers == 0 then
                 local emptySpectate = Instance.new("TextLabel")
                 emptySpectate.Size = UDim2.new(1, 0, 0, 42)
-                emptySpectate.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+                emptySpectate.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
                 emptySpectate.BorderSizePixel = 0
                 emptySpectate.Text = "No players available to spectate"
                 emptySpectate.TextColor3 = Color3.fromRGB(140, 150, 175)
@@ -3613,7 +3543,6 @@ local function buildTeleport()
         end
     end)
 end
-
 local function copyLink(link, label)
     if not link or link == "" or link:find("PASTE_") then
         notify("Set your " .. label .. " link first")
@@ -3626,11 +3555,10 @@ local function copyLink(link, label)
         notify("Select the link and copy it")
     end
 end
-
 local function createSocialRow(title, link, label)
     local holder = Instance.new("Frame")
     holder.Size = UDim2.new(1, 0, 0, 58)
-    holder.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+    holder.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
     holder.BorderSizePixel = 0
     holder.Parent = Content
     Instance.new("UICorner", holder).CornerRadius = UDim.new(0, 8)
@@ -3660,11 +3588,11 @@ local function createSocialRow(title, link, label)
     copy.AnchorPoint = Vector2.new(1, 0.5)
     copy.Position = UDim2.new(1, -10, 0.5, 0)
     copy.Size = UDim2.fromOffset(58, 28)
-    copy.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
+    copy.BackgroundColor3 = Color3.fromRGB(125, 65, 205)
     copy.BorderSizePixel = 0
     copy.AutoButtonColor = false
     copy.Text = "COPY"
-    copy.TextColor3 = Color3.fromRGB(10, 15, 25)
+    copy.TextColor3 = Color3.new(1, 1, 1)
     copy.TextSize = 9
     copy.Font = Enum.Font.GothamBold
     copy.Parent = holder
@@ -3674,7 +3602,6 @@ local function createSocialRow(title, link, label)
     end)
     return holder
 end
-
 connect(LocalPlayer.CharacterAdded, function(char)
     task.defer(function()
         local humanoid = char:WaitForChild("Humanoid", 5)
@@ -3688,7 +3615,6 @@ connect(LocalPlayer.CharacterAdded, function(char)
         end
     end)
 end)
-
 local function buildAbout()
     createContentLayout()
     createSocialRow("Discord JAJAturok", Config.DiscordLink, "Discord")
@@ -3703,7 +3629,7 @@ local function buildAbout()
     for _, featureName in ipairs(upcomingFeatures) do
         local featureLabel = Instance.new("TextLabel")
         featureLabel.Size = UDim2.new(1, 0, 0, 28)
-        featureLabel.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+        featureLabel.BackgroundColor3 = Color3.fromRGB(21, 20, 30)
         featureLabel.BorderSizePixel = 0
         featureLabel.Text = "• " .. featureName
         featureLabel.TextColor3 = Color3.fromRGB(190, 195, 210)
@@ -3717,7 +3643,6 @@ local function buildAbout()
         padding.Parent = featureLabel
     end
 end
-
 connect(MainTab.MouseButton1Click, function()
     selectTab("Main", buildMain)
 end)
@@ -3733,9 +3658,8 @@ end)
 connect(AboutTab.MouseButton1Click, function()
     selectTab("About", buildAbout)
 end)
-
 selectTab("Main", buildMain)
-
+showMainUI()
 local function destroyESP(player)
     local data = ESP[player]
     if not data then return end
@@ -3746,7 +3670,6 @@ local function destroyESP(player)
     end
     ESP[player] = nil
 end
-
 local function createESP(player)
     if player == LocalPlayer then return end
     destroyESP(player)
@@ -3797,7 +3720,7 @@ local function createESP(player)
     healthFill.AnchorPoint = Vector2.new(0, 1)
     healthFill.Position = UDim2.fromScale(0, 1)
     healthFill.Size = UDim2.fromScale(1, 1)
-    healthFill.BackgroundColor3 = Color3.fromRGB(0, 210, 255)
+    healthFill.BackgroundColor3 = Color3.fromRGB(70, 220, 110)
     healthFill.BorderSizePixel = 0
     healthFill.Parent = healthBackground
     local character = getCharacter(player)
@@ -3816,11 +3739,9 @@ local function createESP(player)
         HealthFill = healthFill,
     }
 end
-
 for _, player in ipairs(Players:GetPlayers()) do
     createESP(player)
 end
-
 connect(Players.PlayerAdded, function(player)
     createESP(player)
     connect(player.CharacterAdded, function()
@@ -3831,9 +3752,7 @@ connect(Players.PlayerAdded, function(player)
         end)
     end)
 end)
-
 connect(Players.PlayerRemoving, destroyESP)
-
 connect(RunService.RenderStepped, function()
     if not KeyVerified then return end
     Camera = Workspace.CurrentCamera
@@ -3898,7 +3817,9 @@ connect(RunService.RenderStepped, function()
                 )
                 data.HealthFill.Size = UDim2.new(1, 0, healthRatio, 0)
                 data.HealthFill.BackgroundColor3 =
-                    Color3.fromRGB(0, 210, 255)
+                    Color3.fromRGB(70 + (1 - healthRatio) * 185,
+                                   220 * healthRatio,
+                                   80)
             end
         else
             if data.Highlight then
@@ -3910,7 +3831,6 @@ connect(RunService.RenderStepped, function()
         end
     end
 end)
-
 connect(AimToggle.MouseButton1Click, function()
     if aimMoved then
         aimMoved = false
@@ -3918,41 +3838,27 @@ connect(AimToggle.MouseButton1Click, function()
     end
     updateAimButtonState(not Config.TrackingEnabled)
 end)
-
--- Reopen Button (Custom 3 Horizontal Lines / Hamburger Menu Icon)
-local ReopenButton = Instance.new("TextButton")
+local ReopenButton = Instance.new("ImageButton")
 ReopenButton.Name = "MenuReopenButton"
 ReopenButton.AnchorPoint = Vector2.new(1, 1)
 ReopenButton.Position = UDim2.new(1, -18, 1, -18)
 ReopenButton.Size = UDim2.fromOffset(52, 52)
-ReopenButton.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
-ReopenButton.Text = ""
+ReopenButton.BackgroundColor3 = Color3.fromRGB(15, 14, 21)
+ReopenButton.Image = "rbxassetid://10723404337"
+ReopenButton.ScaleType = Enum.ScaleType.Fit
 ReopenButton.Visible = false
 ReopenButton.ZIndex = 1000
 ReopenButton.Parent = ScreenGui
 Instance.new("UICorner", ReopenButton).CornerRadius = UDim.new(0, 12)
-
-local ReopenStroke = Instance.new("UIStroke")
-ReopenStroke.Color = Color3.fromRGB(0, 210, 255)
-ReopenStroke.Thickness = 1.5
-ReopenStroke.Parent = ReopenButton
-
--- Three Horizontal Lines
-for i = 0, 2 do
-    local line = Instance.new("Frame")
-    line.Size = UDim2.fromOffset(24, 3)
-    line.Position = UDim2.new(0.5, -12, 0.3 + (i * 0.2), -1)
-    line.BackgroundColor3 = Color3.fromRGB(0, 210, 255)
-    line.BorderSizePixel = 0
-    line.Parent = ReopenButton
-    Instance.new("UICorner", line).CornerRadius = UDim.new(1, 0)
-end
+local reopenStroke = Instance.new("UIStroke")
+reopenStroke.Color = Color3.fromRGB(125, 65, 205)
+reopenStroke.Thickness = 1.5
+reopenStroke.Parent = ReopenButton
 
 local reopenDragging = false
 local reopenDragStart
 local reopenStartPosition
 local reopenMoved = false
-
 connect(ReopenButton.InputBegan, function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1
         or input.UserInputType == Enum.UserInputType.Touch then
@@ -3969,7 +3875,6 @@ connect(ReopenButton.InputBegan, function(input)
         end)
     end
 end)
-
 connect(UserInputService.InputChanged, function(input)
     if reopenDragging and (
         input.UserInputType == Enum.UserInputType.MouseMovement
@@ -3988,17 +3893,14 @@ connect(UserInputService.InputChanged, function(input)
         ReopenButton.Position = ReopenButton.Position:Lerp(targetPosition, 0.32)
     end
 end)
-
 hideMainMenu = function()
     Main.Visible = false
     ReopenButton.Visible = true
 end
-
 local function showMainMenu()
     Main.Visible = true
     ReopenButton.Visible = false
 end
-
 connect(ReopenButton.Activated, function()
     if reopenMoved then
         reopenMoved = false
@@ -4006,7 +3908,6 @@ connect(ReopenButton.Activated, function()
     end
     showMainMenu()
 end)
-
 connect(ReopenButton.MouseButton1Click, function()
     if reopenMoved then
         reopenMoved = false
